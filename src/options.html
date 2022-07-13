@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anitrex settings</title>
+    <link rel="stylesheet" type="text/css" href="options.css" />
+    <link rel="stylesheet" type="text/css" href="_.css" />
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <main>
+        <div class="header">
+            <h3>AniList Token</h3>
+            <div class="right-header">
+                <button class="button" id="update-list-button" title="Update local anime list"><i class='bx bx-refresh'></i></button>
+                <a id="get-token" class="button" href="https://anilist.co/api/v2/oauth/authorize?client_id=8806&response_type=token" target="_blank">
+                    <i class='bx bx-link-external'></i> Get token</a>
+            </div>
+        </div>
+        <div class="info">
+            <p id="user-id">Current User ID: </p>
+        </div>
+        <div class="search">
+            <p>Paste the text provided by AniList below:</p>
+            <input id="token-search-box" placeholder="AniList token" />
+            <button id="set-token"><i class='bx bx-check' ></i> Set token</button> <p id="request-message"></p>
+        </div>
+    </main>
+
+    <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+html, body {
+    overflow: hidden;
+    background-color: #212129;
+    color: white
+}
+
+button, a.button {
+    height: 45px;
+    line-height: 45px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+    background-color: #FF7A00;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: .5s background-color;
+}
+
+button i, a.button i {
+    vertical-align: middle;
+    margin: auto 5px auto 0;
+}
+
+button:hover, a.button:hover {
+    background-color: #FF5C00;
+}
+
+button:disabled {
+    background-color: #FF5C00;
+}
+
+main {
+    max-width: 50vw;
+    padding: 10vh 0;
+}
+
+.header {
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.info {
+    display: none;
+    padding: 0 50px;
+    margin: 25px 0;
+    color: lightgray;
+}
+
+.search {
+    padding: 0 50px;
+    margin-top: 35px;
+}
+
+.search p {
+    font-size: 14px;
+}
+
+.search input {
+    background-color: #17171D;
+    outline: none;
+    color: white;
+    height: 45px;
+    border-radius: 10px;
+    padding: 0 15px;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search > #set-token {
+    margin-top: 25px;
+    display: none;
+}
+
+.right-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#update-list-button {
+    height: 45px;
+    width: 45px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    background-color: #17171D;
+    outline: none;
+    border: none;
+    transition: .5s background-color;
+    display: none;
+}
+#update-list-button:hover {
+    background-color: #212129;
+}
+
+#update-list-button > i {
+    margin: auto;
+    font-size: 25px;
+}
+
+button:disabled {
+    cursor: default;
+}

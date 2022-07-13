@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="popup.css" />
+    <link rel="stylesheet" type="text/css" href="_.css" />
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <main id="popup">
+        <header>
+            <input type="text" class="anitrex-input" id="anitrex-search-box" placeholder="English/Romaji title" autofocus spellcheck="false" />
+        </header>
+
+        <div id="search-results">
+            <div id="loader"></div>
+        </div>
+
+        <footer>
+            <div id="current-anime-container"></div>
+            <div id="load-more-button"><i class='bx bx-chevron-down'></i></div>
+        </footer>
+    </main>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

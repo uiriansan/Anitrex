@@ -1,0 +1,308 @@
+html, body {
+    background-color: #212129;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+main#popup {
+    margin: 0;
+    padding: 0;
+    width: 400px;
+    max-height: 600px;
+    background-color: #212129;
+}
+
+main#popup > header {
+    display: flex;
+    padding: 15px;
+}
+
+main#popup > footer {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+main#popup > footer > #load-more-button {
+    width: 100%;
+    height: 45px;
+    background-color: #FF7A00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    color: white;
+    cursor: pointer;
+    transition: .5s background-color;
+}
+main#popup > footer > #load-more-button:hover {
+    background-color: #FF5C00;
+}
+
+main#popup > footer > #current-anime-container {
+    height: 150px;
+    width: 100%;
+    background-color: #17171D;
+}
+
+.anitrex-input {
+    border: none;
+    outline: none;
+    background-color: #17171D;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    height: 45px;
+    padding: 0 15px;
+}
+.anitrex-input::-webkit-input-placeholder {
+    font-style: italic;
+}
+.anitrex-input:-moz-placeholder {
+    font-style: italic;  
+}
+.anitrex-input::-moz-placeholder {
+    font-style: italic;  
+}
+.anitrex-input:-ms-input-placeholder {  
+    font-style: italic; 
+}
+
+.anitrex-button {
+    height: 45px;
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 10px;
+    background-color: #FF7A00;
+    font-size: 16px;
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+#anitrex-search-button {
+    min-width: 45px;
+    margin-left: 10px;
+    padding: 0;
+    font-size: 18px;
+}
+
+#search-results {
+    padding: 0;
+    color: white;
+}
+
+#search-results > .anime-result {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    gap: 15px;
+}
+
+#search-results > .anime-result:not(:first-child) {
+    margin-top: 15px;
+}
+
+#search-results > .anime-result > .anime-result-image {
+    height: 120px;
+    width: 85px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.anime-result > .anime-result-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(33, 33, 41, .9);
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+.anime-result > .anime-result-overlay > .overlay-button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    border-radius: 15px;
+    line-height: 50px;
+    align-items: center;
+    transition: .5s color;
+}
+.anime-result > .anime-result-overlay > .overlay-button:hover:enabled {
+    color: #FF7A00;
+}
+.anime-result > .anime-result-overlay > .overlay-button:disabled {
+    cursor: default;
+    color: gray;
+}
+.anime-result:hover .anime-result-overlay {
+    display: flex;
+}
+
+.anime-result p, .anime-result h4 {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.anime-result h2.anime-title {
+    max-width: 250px;
+}
+.anime-result p {
+    margin: 6px 0;
+    padding: 0px;
+    color: lightgray;
+}
+.anime-title {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+.anime-title-english {
+    color: lightgray;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+    margin-top: 5px;
+}
+.anime-score {
+}
+.anime-score > i {
+    color: #FF7A00;
+}
+p.anime-format {
+    margin-top: 10px;
+}
+p.anime-genres {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+p.anime-genres> span.is-anime-adult {
+    display: block;
+    width: fit-content;
+    font-size: 12px;
+    color: #FF5C00;
+    border: 1.5px solid #FF5C00;
+    border-radius: 5px;
+    padding: 2px;
+    margin-right: 5px;
+}
+#loader {
+    margin: 0 auto;
+    border: 5px solid #17171D;
+    border-top: 5px solid black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.text-center {
+    text-align: center;
+}
+
+#current-anime-container {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    color: white;
+    gap: 15px;
+}
+#current-anime-container > .anime-result-image {
+    height: 120px;
+    width: 85px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+#current-anime-container > #current-anime-info {
+    height: 100%;
+    display: flex;
+    padding: 15px 0;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#current-anime-romaji-title {
+    font-size: 14px;
+    padding: 0;
+}
+#current-anime-english-title {
+    color: lightgray;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+    margin-top: 5px;
+    max-width: 250px;
+}
+#current-anime-english-title, #current-anime-info > p {
+    margin: 6px 0;
+    padding: 0px;
+    color: lightgray;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#current-anime-episodes-controls {
+    width: 100%;
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+#current-anime-titles {
+    padding: 0;
+    margin: 0;
+    margin-top: 5px;
+}
+
+.episode-button {
+    border: none;
+    outline: none;
+    background-color: #212129;
+    color: white;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 16px;
+}
+.episode-button:hover:enabled > i {
+    color: #FF7A00;
+}
+.episode-button:disabled {
+    cursor: default;
+    background-color: #17171D;
+    color: grey;
+}
+span#current-anime-watched-episodes, span#current-anime-total-episodes {
+    font-weight: bold;
+}
+span#current-anime-watched-episodes {
+    color: #FF7A00;
+}
+
+.orange {
+    color: #FF7A00;
+}
