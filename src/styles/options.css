@@ -51,7 +51,7 @@ main {
     font-weight: bold;
 }
 
-.info {
+#info {
     display: none;
     padding: 0 50px;
     margin: 25px 0;
@@ -113,4 +113,16 @@ main {
 
 button:disabled {
     cursor: default;
+}
+
+#user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+}
+
+div#info-data {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

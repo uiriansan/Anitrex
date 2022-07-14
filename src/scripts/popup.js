@@ -1,6 +1,7 @@
-if (!localStorage.getItem('user-id')) {
+if (!localStorage.getItem('anitrex-anilist-token')) {
     document.querySelector('main#popup > *').style.display = 'none';
-    document.querySelector('main#popup').innerHTML = '<div class="text-center">Setup your AniList token!</div>'
+    document.querySelector('main#popup').style.height = '100px';
+    document.querySelector('main#popup').innerHTML = '<div class="text-center white-bold align-center">Setup your AniList token first!</div>'
 }
 
 const searchBox = document.getElementById('anitrex-search-box');
@@ -97,40 +98,46 @@ function getSearchResults() {
         });
 }
 
-function addAnimeToList(event) {
+// *DONE
+async function addAnimeToListtttttttttttttttt(event) {
     const t = event.currentTarget;
     t.disabled = true;
     t.innerHTML = '<i class="bx bx-dots-horizontal-rounded"></i>';
-    const user_id = localStorage.getItem('user-id');
     const status = event.currentTarget.dataset.status;
     const anime_id = event.currentTarget.dataset.anime;
     const progress = status === 'CURRENT' ? 1 : 0;
-    const url = `http://localhost:3333/anime-add-to-list?id=${user_id}&anime=${anime_id}&status=${status}&progress=${progress}`;
 
-    fetch(url).then((response) => response.json())
-        .then((data) => {
-            if (data.status === 200) {
-                t.innerHTML = '<i class="bx bx-check"></i>';
+    const response = await addAnimeToList(anime_id, status, progress);
 
-                var local_anime_list = JSON.parse(localStorage.getItem('anime-list'));
-                local_anime_list[data.list_entry.status].push(data.list_entry);
-                localStorage.setItem('anime-list', JSON.stringify(local_anime_list));
+    /*
+        anime -> response.media
+        status -> response.status
+    */
 
-                if (data.list_entry.status === 'CURRENT') {
-                    localStorage.setItem('current-anime', JSON.stringify(data.list_entry));
-                    getCurrentAnime();
-                }
-            } else {
-                t.innerHTML = '<i class="bx bx-error-circle"></i>';
-                t.disabled = true;
-                console.log(data);
-            }
-        })
-        .catch((err) => {
-            t.innerHTML = '<i class="bx bx-error-circle"></i>';
-            t.disabled = true;
-            console.log(err);
-        });
+    // fetch(url).then((response) => response.json())
+    //     .then((data) => {
+    //         if (data.status === 200) {
+    //             t.innerHTML = '<i class="bx bx-check"></i>';
+
+    //             var local_anime_list = JSON.parse(localStorage.getItem('anime-list'));
+    //             local_anime_list[data.list_entry.status].push(data.list_entry);
+    //             localStorage.setItem('anime-list', JSON.stringify(local_anime_list));
+
+    //             if (data.list_entry.status === 'CURRENT') {
+    //                 localStorage.setItem('current-anime', JSON.stringify(data.list_entry));
+    //                 getCurrentAnime();
+    //             }
+    //         } else {
+    //             t.innerHTML = '<i class="bx bx-error-circle"></i>';
+    //             t.disabled = true;
+    //             console.log(data);
+    //         }
+    //     })
+    //     .catch((err) => {
+    //         t.innerHTML = '<i class="bx bx-error-circle"></i>';
+    //         t.disabled = true;
+    //         console.log(err);
+    //     });
 }
 
 document.addEventListener('DOMContentLoaded', async (e) => {

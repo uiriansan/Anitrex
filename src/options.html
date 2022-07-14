@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anitrex settings</title>
-    <link rel="stylesheet" type="text/css" href="options.css" />
-    <link rel="stylesheet" type="text/css" href="_.css" />
+    <link rel="stylesheet" type="text/css" href="styles/options.css" />
+    <link rel="stylesheet" type="text/css" href="styles/_.css" />
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -19,8 +19,9 @@
                     <i class='bx bx-link-external'></i> Get token</a>
             </div>
         </div>
-        <div class="info">
-            <p id="user-id">Current User ID: </p>
+        <div id="info">
+            <h4>AniList | Logged as:</h4>
+            <div id="info-data"><img id="user-avatar"/> <div class="orange" id="user-name"></div></div>
         </div>
         <div class="search">
             <p>Paste the text provided by AniList below:</p>
@@ -29,6 +30,7 @@
         </div>
     </main>
 
-    <script src="options.js"></script>
+    <script src="scripts/anime.js"></script>
+    <script src="scripts/options.js"></script>
 </body>
 </html>
