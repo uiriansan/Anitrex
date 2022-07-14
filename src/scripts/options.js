@@ -10,7 +10,6 @@ const refreshLocalAnimeListBtn = document.getElementById('update-list-button');
 
 if (localStorage.getItem('anitrex-anilist-token')) {
     info.style.display = 'block';
-    addAnimeToList(20819, 'PLANNING', 0);
     userName.innerHTML = localStorage.getItem('anitrex-anilist-user-name') + ' (' + localStorage.getItem('anitrex-anilist-user-id') + ')';
     userAvatar.src = localStorage.getItem('anitrex-anilist-user-avatar');
     setTokenButton.innerHTML = '<i class="bx bx-check" ></i> Update token';

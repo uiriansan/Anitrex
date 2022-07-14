@@ -12,8 +12,8 @@ const loader = document.getElementById('loader');
 var clickTimeout;
 
 function findAnimeInLocalList(anime_id) {
-    const anime_list = JSON.parse(localStorage.getItem('anime-list'));
-    var list = null;
+    const anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
+    let list = null;
 
     Object.values(anime_list).forEach(val => {
         const t = val.find(x => x.media.id === anime_id);
@@ -24,7 +24,7 @@ function findAnimeInLocalList(anime_id) {
     return list;
 }
 
-function getSearchResults() {
+async function getSearchResults() {
     const query = searchBox.value;
 
     if (query.length === 0) {
@@ -34,72 +34,68 @@ function getSearchResults() {
         return;
     }
 
-    const id = localStorage.getItem('user-id');
-    const url = `http://localhost:3333/anime-search?id=${id}&q=${query}`;
+    let search_response;
+    try {
+        search_response = await searchForAnime(query);
+    } catch (err) {
+        console.log(err);
+        searchResults.style.padding = '15px';
+        searchResults.innerHTML = data.status + ' | ' + data.err;
+    }
 
-    fetch(url).then((response) => response.json())
-        .then((data) => {
-            if (data.status === 200) {
-                if (data.animes.length === 0) {
-                    searchResults.style.padding = '15px';
-                    searchResults.innerHTML = `<div class="text-center">No results for '${query}'</div>`;
-                    return;
-                }
+    if (search_response.length === 0) {
+        searchResults.style.padding = '15px';
+        searchResults.innerHTML = `<div class="text-center">No results for '${query}'</div>`;
+        return;
+    }
 
-                loader.style.display = 'none';
-                var elementString = '';
+    loader.style.display = 'none';
+    let element_string = '';
 
-                data.animes.forEach((anime, i) => {
-                    var overlay = '';
-                    const local_anime_list = findAnimeInLocalList(anime.id);
+    search_response.forEach((anime, i) => {
+        let overlay = '';
+        const local_anime_list = findAnimeInLocalList(anime.id);
 
-                    if (local_anime_list != null) {
-                        overlay = `<span>Already added to <span class="orange">⋅${local_anime_list}⋅</span></span>`;
-                    } else if (anime.status === 'NOT_YET_RELEASED') {
-                        overlay = `
-                            <button class="overlay-button" title="Add anime to ⋅PLANNING⋅" data-anime="${anime.id}" data-status="PLANNING")"><i class='bx bx-list-plus'></i></button>
-                        `
-                    } else {
-                        overlay = `
-                            <button class="overlay-button" title="Add anime to ⋅PLANNING⋅" data-anime="${anime.id}" data-status="PLANNING"><i class='bx bx-list-plus'></i></button>
-                            <button class="overlay-button" title="Add anime to ⋅CURRENT⋅ and set first episode as watched" data-anime="${anime.id}" data-status="CURRENT"><i class="bx bx-plus-circle"></i></button>
-                        `
-                    }
+        if (local_anime_list != null) {
+            overlay = `<span>Already added to <span class="orange">⋅${local_anime_list}⋅</span></span>`;
+        } else if (anime.status === 'NOT_YET_RELEASED') {
+            overlay = `
+                <button class="overlay-button" title="Add anime to ⋅PLANNING⋅" data-anime="${anime.id}" data-status="PLANNING")"><i class='bx bx-list-plus'></i></button>
+            `
+        } else {
+            overlay = `
+                <button class="overlay-button" title="Add anime to ⋅PLANNING⋅" data-anime="${anime.id}" data-status="PLANNING"><i class='bx bx-list-plus'></i></button>
+                <button class="overlay-button" title="Add anime to ⋅CURRENT⋅ and set first episode as watched" data-anime="${anime.id}" data-status="CURRENT"><i class="bx bx-plus-circle"></i></button>
+            `
+        }
 
-                    elementString = elementString + `
-                    <div class="anime-result">
-                        <div class="anime-result-image" style="background-image: url(${anime.coverImage.large})"></div>
-                        <div class="anime-result-info">
-                            <h2 class="anime-title">${anime.title.romaji}</h2>
-                            <h4 class="anime-title-english">${anime.title.english=== anime.title.romaji || anime.title.english == null ? '' : anime.title.english}</h4>
-                            <p class="anime-format">${anime.format != null ? anime.format : 'N/A'} - ${anime.seasonYear != null ? anime.seasonYear : 'N/A'} | ${toTitleCase(anime.status)}</p>
-                            <p class="anime-score"><i class='bx bxs-star'></i> ${anime.averageScore == null ? 'N/A' : anime.averageScore} | ${anime.studios.nodes.length !== 0 ? anime.studios.nodes[0].name : 'N/A'} | ${anime.source == null ? '' : toTitleCase(anime.source.replace('_', ' '))}</p>
-                            <p class="anime-genres">${anime.isAdult ? '<span class="is-anime-adult">NSFW</span>' : ''}${anime.genres.join(' • ')}</p>
-                        </div>
-                        <div class="anime-result-overlay">
-                            ${overlay}
-                        </div>
-                    </div>`;
-                });
-                searchResults.style.padding = '15px';
-                searchResults.innerHTML = elementString;
+        element_string = element_string + `
+            <div class="anime-result">
+                <div class="anime-result-image" style="background-image: url(${anime.coverImage.large})"></div>
+                <div class="anime-result-info">
+                    <h2 class="anime-title">${anime.title.romaji}</h2>
+                    <h4 class="anime-title-english">${anime.title.english=== anime.title.romaji || anime.title.english == null ? '' : anime.title.english}</h4>
+                    <p class="anime-format">${anime.format != null ? anime.format : 'N/A'} - ${anime.seasonYear != null ? anime.seasonYear : 'N/A'} | ${toTitleCase(anime.status)}</p>
+                    <p class="anime-score"><i class='bx bxs-star'></i> ${anime.averageScore == null ? 'N/A' : anime.averageScore} | ${anime.studios.nodes.length !== 0 ? anime.studios.nodes[0].name : 'N/A'} | ${anime.source == null ? '' : toTitleCase(anime.source.replace('_', ' '))}</p>
+                    <p class="anime-genres">${anime.isAdult ? '<span class="is-anime-adult">NSFW</span>' : ''}${anime.genres.join(' • ')}</p>
+                </div>
+                <div class="anime-result-overlay">
+                    ${overlay}
+                </div>
+            </div>`;
+    });
 
-                const overlay_buttons = document.querySelectorAll('.overlay-button');
-                overlay_buttons.forEach((el, i) => {
-                    el.addEventListener('click', addAnimeToList);
-                });
-            } else {
-                searchResults.style.padding = '15px';
-                searchResults.innerHTML = data.status + ' | ' + data.err;
-            }
-        })
-        .catch((err) => {
-            searchResults.innerHTML = err;
-        });
+    searchResults.style.padding = '15px';
+    searchResults.innerHTML = element_string;
+
+    const overlay_buttons = document.querySelectorAll('.overlay-button');
+    overlay_buttons.forEach((el, i) => {
+        el.addEventListener('click', addAnimeToList);
+    });
 }
 
 // *DONE
-async function addAnimeToListtttttttttttttttt(event) {
+async function addAnimeToList(event) {
     const t = event.currentTarget;
     t.disabled = true;
     t.innerHTML = '<i class="bx bx-dots-horizontal-rounded"></i>';
@@ -107,37 +103,25 @@ async function addAnimeToListtttttttttttttttt(event) {
     const anime_id = event.currentTarget.dataset.anime;
     const progress = status === 'CURRENT' ? 1 : 0;
 
-    const response = await addAnimeToList(anime_id, status, progress);
+    let response;
+    try {
+        response = await updateAnimeList(anime_id, status, progress);
+    } catch (err) {
+        console.log(err);
+        t.innerHTML = '<i class="bx bx-error-circle"></i>';
+        t.disabled = false;
+        return;
+    }
 
-    /*
-        anime -> response.media
-        status -> response.status
-    */
+    t.innerHTML = '<i class="bx bx-check"></i>';
+    var local_anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
+    local_anime_list[response.status].push(response);
+    localStorage.setItem('anitrex-anime-list', JSON.stringify(local_anime_list));
 
-    // fetch(url).then((response) => response.json())
-    //     .then((data) => {
-    //         if (data.status === 200) {
-    //             t.innerHTML = '<i class="bx bx-check"></i>';
-
-    //             var local_anime_list = JSON.parse(localStorage.getItem('anime-list'));
-    //             local_anime_list[data.list_entry.status].push(data.list_entry);
-    //             localStorage.setItem('anime-list', JSON.stringify(local_anime_list));
-
-    //             if (data.list_entry.status === 'CURRENT') {
-    //                 localStorage.setItem('current-anime', JSON.stringify(data.list_entry));
-    //                 getCurrentAnime();
-    //             }
-    //         } else {
-    //             t.innerHTML = '<i class="bx bx-error-circle"></i>';
-    //             t.disabled = true;
-    //             console.log(data);
-    //         }
-    //     })
-    //     .catch((err) => {
-    //         t.innerHTML = '<i class="bx bx-error-circle"></i>';
-    //         t.disabled = true;
-    //         console.log(err);
-    //     });
+    if (response.status === 'CURRENT') {
+        localStorage.setItem('anitrex-current-anime', JSON.stringify(response));
+        getCurrentAnime();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', async (e) => {
@@ -163,28 +147,10 @@ searchBox.onkeyup = delay((e) => {
     getSearchResults();
 }, 500);
 
-function getBigrams(str) {
-    const bigrams = new Set();
-    for (let i = 0; i < str.length - 1; i += 1) {
-        bigrams.add(str.substring(i, i + 2));
-    }
-    return bigrams;
-}
-
-function intersect(set1, set2) {
-    return new Set([...set1].filter((x) => set2.has(x)));
-}
-
-function diceCoefficient(str1, str2) {
-    const bigrams1 = getBigrams(str1);
-    const bigrams2 = getBigrams(str2);
-    return (2 * intersect(bigrams1, bigrams2).size) / (bigrams1.size + bigrams2.size);
-}
-
 function getCurrentAnime(tab_title) {
     var current_anime = {};
     if (tab_title && tab_title.length > 0) {
-        const anime_list = JSON.parse(localStorage.getItem('anime-list'));
+        const anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
         var anime = {};
         var max_similarity = 0;
 
@@ -207,10 +173,10 @@ function getCurrentAnime(tab_title) {
         } else {
             current_anime = anime;
         }
-    } else if (localStorage.getItem('current-anime')) {
-        current_anime = JSON.parse(localStorage.getItem('current-anime'));
+    } else if (localStorage.getItem('anitrex-current-anime')) {
+        current_anime = JSON.parse(localStorage.getItem('anitrex-current-anime'));
     } else {
-        current_anime = JSON.parse(localStorage.getItem('anime-list'))['CURRENT'][0];
+        current_anime = JSON.parse(localStorage.getItem('anitrex-anime-list'))['CURRENT'][0];
     }
 
     const decButtonString = `
@@ -316,22 +282,4 @@ function currentAnimeEpisodeOperation(event) {
         //         console.log(err);
         //     });
     }, 500);
-}
-
-// Delayed events
-function delay(fn, ms) {
-    let timer = 0;
-    return function(...args) {
-        clearTimeout(timer);
-        timer = setTimeout(fn.bind(this, ...args), ms || 0);
-    };
-}
-
-function toTitleCase(str) {
-    return str.replace(
-        /\w\S*/g,
-        function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }
-    );
 }

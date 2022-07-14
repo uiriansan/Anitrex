@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         const anime_status = '';
         const anime_progress = '';
 
-        const status = await addOrUpdateAnimeList(anime_id, anime_status, anime_progress);
+        const status = await updateAnimeList(anime_id, anime_status, anime_progress);
         sendResponse(status);
     }
 });

@@ -32,33 +32,6 @@ async function sendRequest(query, variables, mutation) {
     return data.data;
 }
 
-function addOrUpdateAnimeList(anime_id, anime_status, anime_progress) {
-    const query = `
-        mutation ($mediaId: Int, $status: MediaListStatus, $progress: Int) {
-            SaveMediaListEntry (mediaId: $mediaId, status: $status, progress: $progress) {
-                id
-                status
-                progress
-                media { id title { romaji english } episodes format seasonYear status source coverImage { large medium } isFavourite isAdult }
-            }
-        }
-    `;
-    const variables = {
-        "mediaId": anime_id,
-        "status": anime_status,
-        "progress": anime_progress
-    };
-
-    try {
-        sendRequest(query, variables, true).then(data => {
-            console.log(data);
-            // TODO -> Save to localStorage and return status to background.js
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
-
 function getAnimeList() {
     const user_id = localStorage.getItem('anitrex-anilist-user-id')
 
@@ -98,7 +71,7 @@ function getAnimeList() {
     }
 }
 
-function addAnimeToList(anime_id, status, progress) {
+function updateAnimeList(anime_id, status, progress) {
     const query = `
         mutation ($mediaId: Int, $status: MediaListStatus, $progress: Int) {
             SaveMediaListEntry (mediaId: $mediaId, status: $status, progress: $progress) {
@@ -117,14 +90,9 @@ function addAnimeToList(anime_id, status, progress) {
     };
 
     return new Promise((resolve, reject) => {
-        try {
-            sendRequest(query, variables, true).then(data => {
-                console.log(data.SaveMediaListEntry);
-                // resolve(data.SaveMediaListEntry.media)
-            });
-        } catch (err) {
-            reject(console.log(err));
-        }
+        sendRequest(query, variables, true).then(data => {
+            resolve(data.SaveMediaListEntry)
+        });
     });
 }
 
@@ -144,13 +112,9 @@ function searchForAnime(search_query) {
     };
 
     return new Promise((resolve, reject) => {
-        try {
-            sendRequest(query, variables, false).then(data => {
-                resolve(data.Page.media);
-            });
-        } catch (err) {
-            reject(console.log(err));
-        }
+        sendRequest(query, variables, false).then(data => {
+            resolve(data.Page.media);
+        });
     });
 }
 

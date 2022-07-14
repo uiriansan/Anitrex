@@ -245,6 +245,8 @@ p.anime-genres> span.is-anime-adult {
 #current-anime-romaji-title {
     font-size: 14px;
     padding: 0;
+    max-width: 250px;
+    white-space: wrap;
 }
 #current-anime-english-title {
     color: lightgray;
