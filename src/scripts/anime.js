@@ -16,7 +16,7 @@ async function sendRequest(query, variables, mutation) {
     if (mutation){
         const token = localStorage.getItem('anitrex-anilist-token');
 
-        if (!token) return console.log('AniList tokens does not exists');
+        if (!token) return console.log('AniList token does not exists');
 
         options.headers.Authorization = `Bearer ${token}`;
     }

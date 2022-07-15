@@ -34,10 +34,17 @@ main#popup > footer > #load-more-button {
     font-size: 35px;
     color: white;
     cursor: pointer;
-    transition: .5s background-color;
+    transition: background-color .5s;
+}
+main#popup > footer > #load-more-button > i {
+    transition: transform 0s;
 }
 main#popup > footer > #load-more-button:hover {
     background-color: #FF5C00;
+}
+main#popup > footer > #load-more-button:hover > i {
+    transform: scale(1.2);
+    transition: transform 0.3s ease-out;
 }
 
 main#popup > footer > #current-anime-container {
@@ -204,6 +211,17 @@ p.anime-genres> span.is-anime-adult {
 #loader {
     margin: 0 auto;
     border: 5px solid #17171D;
+    border-top: 5px solid black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+#loader-mini {
+    margin: 0 auto;
+    border: 5px solid white;
     border-top: 5px solid black;
     border-radius: 50%;
     width: 20px;
