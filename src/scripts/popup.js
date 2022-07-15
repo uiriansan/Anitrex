@@ -262,6 +262,8 @@ function IncreaseOrDecreaseEpisode(event) {
             new_status = 'COMPLETED';
             // Disable button
             t.disabled = true;
+        } else if (progress+1 < total && progress+1 > 0) {
+            new_status = 'CURRENT';
         }
     } else {
         new_progress = progress - 1;
@@ -277,6 +279,8 @@ function IncreaseOrDecreaseEpisode(event) {
 
             // Disable button
             t.disabled = true;
+        } else if (progress+1 < total && progress+1 > 0) {
+            new_status = 'CURRENT';
         }
     }
 
@@ -285,6 +289,7 @@ function IncreaseOrDecreaseEpisode(event) {
     // Update buttons progress data
     control_parent.querySelectorAll('button.episode-button').forEach((el, i) => {
         el.dataset.progress = new_progress;
+        el.dataset.status = new_status;
     });
 
     // Update counter
@@ -306,10 +311,7 @@ function IncreaseOrDecreaseEpisode(event) {
             anime_list[new_status].push(updated_anime);
             localStorage.setItem('anitrex-anime-list', JSON.stringify(anime_list));
 
-            const cur_anim = JSON.parse(localStorage.getItem('anitrex-current-anime'));
-            if (anime_id == cur_anim.media.id) {
-                localStorage.setItem('anitrex-current-anime', JSON.stringify(updated_anime));
-            }
+            localStorage.setItem('anitrex-current-anime', JSON.stringify(updated_anime));
 
             current_anime_loader.style.display = 'none';
         } else {
