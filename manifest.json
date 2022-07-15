@@ -24,8 +24,5 @@
         "48": "/src/img/icon48.png",
         "128": "/src/img/icon128.png"
     },
-    "options_page": "/src/options.html",
-    "background": {
-        "service_worker": "background.js"
-    }
+    "options_page": "/src/options.html"
 }

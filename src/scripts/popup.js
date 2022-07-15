@@ -54,19 +54,6 @@ async function getSearchResults() {
             }
         });
 
-        // Object.values(anime_list).forEach(val => {
-        //     for (let i = 0; i < val.length; i++) {
-        //         // Tested with 'Dice Coefficient' and 'Levenshtein distance'. BOTH SUCKS.
-        //         // diceCoefficient('Arquivos Naruto - Anime Yabu', 'NARUTO') === 0 ??????????????????????????, and with lowercase "naruto" === 0.32
-        //         //TODO-> https://stackoverflow.com/questions/3576211/what-string-similarity-algorithms-are-there
-        //         const sim = diceCoefficient(tab_title.toLowerCase(), val[i].media.title.romaji.toLowerCase());
-
-        //         if (sim > 0.35 && sim > max_similarity) {
-        //             max_similarity = sim;
-        //             anime = val[i];
-        //         }
-        //     }
-        // });
     } else { 
         // Search AniList API
 
@@ -239,7 +226,7 @@ function getCurrentAnime(tab_title) {
             <p id="current-anime-format">${current_anime.media.format != null ? current_anime.media.format : 'N/A'} - ${current_anime.media.seasonYear != null ? current_anime.media.seasonYear : 'N/A'} | ${toTitleCase(current_anime.media.status)}</p>
         </div>
 
-        ${current_anime.media.episodes && current_anime.media.episodes != null ? '<div id="current-anime-episodes-controls">'+decButtonString+'<div><span id="current-anime-watched-episodes">'+current_anime.progress+'</span><span id="current-anime-total-episodes">/'+current_anime.media.episodes+'</span></div>'+incButtonString+' <div id="loader-mini"></div></div>' : ''}
+        ${current_anime.media.episodes && current_anime.media.episodes != null ? '<div id="current-anime-episodes-controls">'+decButtonString+'<div><span id="current-anime-watched-episodes">'+current_anime.progress+'</span><span id="current-anime-total-episodes">/'+current_anime.media.episodes+'</span></div>'+incButtonString+' <div id="loader-mini"></div><div id="current-anime-control-error"><i class="bx bx-error-circle"></i></div></div>' : ''}
     </div>
     `;
     currentAnimeContainer.innerHTML = elementString;
@@ -255,10 +242,11 @@ function IncreaseOrDecreaseEpisode(event) {
     const t = event.currentTarget;
     const operation = t.dataset.operation;
     const anime_id = t.dataset.anime;
+    const old_status = t.dataset.status;
     const progress = Number(t.dataset.progress);
     const total = Number(t.dataset.total);
 
-    let status = t.dataset.status;
+    let new_status = old_status;
     let new_progress = progress;
 
     if (operation === 'INCREMENT') {
@@ -271,7 +259,7 @@ function IncreaseOrDecreaseEpisode(event) {
 
         if (progress+1 === total) {
             // Move to completed
-            status = 'COMPLETED';
+            new_status = 'COMPLETED';
             // Disable button
             t.disabled = true;
         }
@@ -285,14 +273,12 @@ function IncreaseOrDecreaseEpisode(event) {
 
         if (progress-1 === 0) {
             // Move to planning
-            status = 'PLANNING';
+            new_status = 'PLANNING';
 
             // Disable button
             t.disabled = true;
         }
     }
-
-    console.log(`${new_progress} - ${status}`);
 
     const control_parent = t.parentElement;
 
@@ -305,16 +291,35 @@ function IncreaseOrDecreaseEpisode(event) {
     const watched_episode_counter = control_parent.querySelector('div > #current-anime-watched-episodes');
     watched_episode_counter.innerHTML = new_progress;
 
-    clickTimeout = setTimeout(function() {
-        console.log(new_progress);
+    clickTimeout = setTimeout(async function() {
+        document.getElementById('current-anime-control-error').style.display = 'none';
+        const current_anime_loader = document.getElementById('loader-mini');
+        current_anime_loader.style.display = 'block';
 
-        chrome.runtime.sendMessage({
-            greeting: 'UPDATE_ANIME_LIST',
-            anime_id: anime_id,
-            anime_status: status,
-            anime_progress: progress
-        }, function (response) {
-            //Idk
-        });
+        const updated_anime = await updateAnimeList(anime_id, new_status, new_progress);
+
+        if (updated_anime.status === new_status && updated_anime.progress == new_progress) {
+            let anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
+            const old_entry_index = anime_list[old_status].findIndex(x => x.media.id == anime_id);
+            
+            anime_list[old_status].splice(old_entry_index, 1);
+            anime_list[new_status].push(updated_anime);
+            localStorage.setItem('anitrex-anime-list', JSON.stringify(anime_list));
+
+            const cur_anim = JSON.parse(localStorage.getItem('anitrex-current-anime'));
+            if (anime_id == cur_anim.media.id) {
+                localStorage.setItem('anitrex-current-anime', JSON.stringify(updated_anime));
+            }
+
+            current_anime_loader.style.display = 'none';
+        } else {
+            current_anime_loader.style.display = 'none';
+            document.getElementById('current-anime-control-error').style.display = 'block';
+
+            watched_episode_counter.innerHTML = progress;
+            control_parent.querySelectorAll('button.episode-button').forEach((el, i) => {
+                el.dataset.progress = progress;
+            });
+        }
     }, 500);
 }

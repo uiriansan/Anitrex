@@ -220,13 +220,19 @@ p.anime-genres> span.is-anime-adult {
 }
 
 #loader-mini {
-    margin: 0 auto;
-    border: 5px solid white;
-    border-top: 5px solid black;
+    margin: 0 0;
+    border: 2px solid white;
+    border-top: 2px solid black;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     animation: spin 1s linear infinite;
+    display: none;
+}
+
+#current-anime-control-error {
+    color: lightcoral;
+    font-size: 18px;
     display: none;
 }
 
