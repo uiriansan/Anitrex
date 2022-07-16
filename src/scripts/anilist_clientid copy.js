@@ -1,0 +1,1 @@
+const anilist_client_id = 'YOUR_ANILIST_CLIENT_ID';

@@ -1,4 +1,4 @@
-html, body {
+body {
     background-color: #212129;
     overflow: hidden;
     margin: 0;
@@ -87,13 +87,6 @@ main#popup > footer > #current-anime-container {
     font-size: 16px;
     flex-grow: 1;
     cursor: pointer;
-}
-
-#anitrex-search-button {
-    min-width: 45px;
-    margin-left: 10px;
-    padding: 0;
-    font-size: 18px;
 }
 
 #search-results {
@@ -327,4 +320,118 @@ span#current-anime-watched-episodes, span#current-anime-total-episodes {
 }
 span#current-anime-watched-episodes {
     color: #FF7A00;
+}
+
+main#popup > div#anime-list {
+    width: 100%;
+    background-color: #212129;
+    color: white;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 400px;
+    margin: 0;
+    padding: 15px 15px 80px 15px;
+    display: none;
+}
+
+details > summary {
+    cursor: pointer;
+}
+
+.anime-list-list-name {
+    font-size: 15px;
+    font-weight: bold;
+    columns: white;
+    text-transform: uppercase;
+}
+.anime-list-list-length {
+    margin-left: 5px;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, .8);
+}
+
+details.anime-list-details:not(:first-child) {
+    margin-top: 35px;
+}
+
+.anime-list-list-content {
+    display: flex;
+    margin-top: 10px;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.anime-list-anime-image {
+    width: 40px;
+    height: 56px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+}
+.anime-list-anime-titles > * {
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.anime-list-anime-titles > div:first-child {
+    font-weight: 600;
+    font-size: 13px;
+}
+.anime-list-anime-titles > div:last-child {
+    opacity: .6;
+}
+
+.anime-list-overlay {
+    height: 100%;
+    position: absolute;
+    align-items: center;
+    top: 0;
+    justify-content: end;
+    right: 10px;
+    background-color: #17171D;
+    border-radius: 10px;
+    display: none;
+}
+.anime-list-overlay > .anime-list-episodes-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.anime-list-list-content:hover {
+    background-color: #17171D;
+    border-radius: 10px;
+}
+.anime-list-list-content:hover > *:not(.anime-list-overlay) {
+    opacity: .5;
+}
+.anime-list-list-content:hover > .anime-list-overlay {
+    display: flex;
+}
+
+
+
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #17171D #212129;
+}
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+}
+
+  *::-webkit-scrollbar-track {
+    background: #212129;
+}
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #17171D;
+    border-radius: 4px;
+    border: 2px solid #212129;
 }

@@ -7,14 +7,11 @@ if (!localStorage.getItem('anitrex-anilist-token')) {
 const searchBox = document.getElementById('anitrex-search-box');
 const searchResults = document.getElementById('search-results');
 const currentAnimeContainer = document.getElementById('current-anime-container');
+const expandListButton = document.getElementById('load-more-button');
 
 const loader = document.getElementById('loader');
 let clickTimeout;
-let isFullAnimeListOpen = false;
-
-if (isFullAnimeListOpen) {
-    searchBox.placeholder = 'Search local list';
-}
+let isAnimeListExpanded = false;
 
 
 function findAnimeInLocalList(anime_id) {
@@ -33,25 +30,36 @@ function findAnimeInLocalList(anime_id) {
 async function getSearchResults() {
     const query = searchBox.value;
     
-    if (isFullAnimeListOpen) {
+    if (isAnimeListExpanded) {
         // Search locally
+
+        const anime_list_container = document.getElementById('anime-list');
 
         const local_anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
 
+        const full_list = [...local_anime_list['CURRENT'], ...local_anime_list['PLANNING'], ...local_anime_list['PAUSED'], ...local_anime_list['COMPLETED']];
+        let matching_titles = {'CURRENT': [], 'PLANNING': [], 'PAUSED': [], 'COMPLETED': []}
+
         if (query.length === 0) {
-            return;
+            const element_string = drawAnimeList(matching_titles);
+            anime_list_container.innerHTML = element_string;
         }
 
-        let matching_animes = {'CURRENT': [], 'PLANNING': [], 'COMPLETED': [], 'PAUSED': []};
+        for (let i = 0; i < full_list.length; i++) {
+            const romaji = full_list[i].media.title.romaji != null ? full_list[i].media.title.romaji : '';
+            const english = full_list[i].media.title.english != null ? full_list[i].media.title.english : '';
 
-        Object.values(local_anime_list).forEach(list => {
-            for (let i = 0; i < list.length; i++) {
-                const romaji = list[i].media.title.romaji != null ? list[i].media.title.romaji : '', english = list[i].media.title.english != null ? list[i].media.title.english : '';
-
-                if (romaji.toLowerCase().includes(query.toLowerCase()) || english.toLowerCase().includes(query.toLowerCase())) {
-                        matching_animes[list[i].status].push(list[i]);
+            if (romaji.toLowerCase().includes(query.toLowerCase())
+                || english.toLowerCase().includes(query.toLowerCase())) {
+                    matching_titles[full_list[i].status].push(full_list[i]);
                 }
-            }
+        }
+
+        const element_string = drawAnimeList(matching_titles);
+        anime_list_container.innerHTML = element_string;
+
+        document.querySelectorAll('.set-bookmark-button').forEach((el, i) => {
+            el.addEventListener('click', setAnimeAsCurrent);
         });
 
     } else { 
@@ -161,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     try {
         [{result}] = await chrome.scripting.executeScript({
             target: {tabId: tab.id},
-            function: () => getSelection().toString(),
+            function: () => getSelection().toString().toLowerCase(),
         });
     } catch (e) {
         return;
@@ -190,7 +198,10 @@ function getCurrentAnime(tab_title) {
                 // Tested with 'Dice Coefficient' and 'Levenshtein distance'. BOTH SUCKS.
                 // diceCoefficient('Arquivos Naruto - Anime Yabu', 'NARUTO') === 0 ??????????????????????????, and with lowercase "naruto" === 0.32
                 //TODO-> https://stackoverflow.com/questions/3576211/what-string-similarity-algorithms-are-there
-                const sim = diceCoefficient(tab_title.toLowerCase(), val[i].media.title.romaji.toLowerCase());
+                const sim = Math.max(
+                    diceCoefficient(tab_title, val[i].media.title.romaji.toLowerCase()),
+                    // diceCoefficient(tab_title, val[i].media.title.english.toLowerCase())
+                );
 
                 if (sim > 0.35 && sim > max_similarity) {
                     max_similarity = sim;
@@ -232,11 +243,11 @@ function getCurrentAnime(tab_title) {
     currentAnimeContainer.innerHTML = elementString;
 
     document.querySelectorAll('.episode-button').forEach((el, i) => {
-        el.addEventListener('click', IncreaseOrDecreaseEpisode);
+        el.addEventListener('click', increaseOrDecreaseEpisode);
     });
 }
 
-function IncreaseOrDecreaseEpisode(event) {
+function increaseOrDecreaseEpisode(event) {
     clearTimeout(clickTimeout);
 
     const t = event.currentTarget;
@@ -325,3 +336,106 @@ function IncreaseOrDecreaseEpisode(event) {
         }
     }, 500);
 }
+
+function drawAnimeList(anime_list) {
+    if (!anime_list) {
+        anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
+    }
+
+    let organized_list = {
+        'Watching': anime_list['CURRENT'],
+        'Planning': anime_list['PLANNING'],
+        'Paused': anime_list['PAUSED'],
+        'Completed': anime_list['COMPLETED']
+    };
+    let element_string = '';
+
+    Object.values(organized_list).forEach((list, i) => {
+        element_string += `<details class="anime-list-details" open><summary><span class="anime-list-list-name">${Object.keys(organized_list)[i]}</span><span class="anime-list-list-length">(${list.length})</span></summary>`;
+
+        for (let i = 0; i < list.length; i++) {
+            element_string += `
+                <div class="anime-list-list-content">
+                    <div class="anime-list-anime-image" style="background-image: url(${list[i].media.coverImage.large})"></div>
+                    <div class="anime-list-anime-titles">
+                        <div>${list[i].media.title.romaji}</div>
+                        <div>${list[i].media.title.english}</div>
+                    </div>
+                    <div class="anime-list-overlay">
+                        <div class="anime-list-episodes-controls">
+                            <button class="episode-button set-bookmark-button" title="Set as current anime" data-anime="${list[i].media.id}" data-entry="${i}" data-list="${list[i].status}"><i class='bx bxs-bookmark'></i></button>
+                        </div>
+                    </div>
+                </div>
+            `
+        }
+        element_string += '</details>';
+    });
+
+    return element_string;
+}
+
+function setAnimeAsCurrent(e) {
+    const t = e.currentTarget;
+    const anime_id = t.dataset.anime;
+    const list = t.dataset.list;
+
+    const anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
+    const entry = anime_list[list].findIndex(x => x.media.id == anime_id);
+
+    localStorage.setItem('anitrex-current-anime', JSON.stringify(anime_list[list][entry]));
+
+    handleAnimeListExpansion();
+    getCurrentAnime();
+}
+
+function handleAnimeListExpansion() {
+    isAnimeListExpanded = !isAnimeListExpanded;
+    
+    const anime_list_container = document.getElementById('anime-list');
+    const footer = document.querySelector('footer');
+
+    // TODO -> CARALHO OLHA ESSA PORRA CONSERTA ESSE CSS SEU ARROMBADO
+
+    if (isAnimeListExpanded) {
+        searchBox.placeholder = 'Search my list';
+        expandListButton.innerHTML = '<i class="bx bx-x"></i>';
+        expandListButton.title = 'Collapse anime list';
+
+        currentAnimeContainer.style.display = 'none';
+        searchResults.style.display = 'none';
+        anime_list_container.style.display = 'block'
+        footer.style.position = 'fixed';
+        
+        const element_string = drawAnimeList();
+
+        anime_list_container.innerHTML = element_string;
+
+        document.querySelectorAll('.set-bookmark-button').forEach((el, i) => {
+            el.addEventListener('click', setAnimeAsCurrent);
+        });
+
+        searchBox.focus();
+        searchBox.value = '';
+    } else {
+        searchBox.placeholder = 'Search AniList';
+        expandListButton.innerHTML = '<i class="bx bx-dots-horizontal-rounded"></i>';
+        expandListButton.title = 'Expand anime list';
+
+        currentAnimeContainer.style.display = 'flex';
+        searchResults.style.display = 'block';
+        anime_list_container.style.display = 'none'
+        footer.style.position = 'relative';
+
+        searchBox.focus();
+        searchBox.value = '';
+    }
+}
+
+expandListButton.addEventListener('click', handleAnimeListExpansion);
+document.body.addEventListener('keydown', function(e) {
+    if (e.key == 'Escape' && isAnimeListExpanded) {
+        e.preventDefault();
+        handleAnimeListExpansion();
+    }
+})

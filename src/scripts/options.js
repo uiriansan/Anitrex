@@ -2,6 +2,8 @@ const info = document.getElementById('info');
 const userName = document.getElementById('user-name');
 const userAvatar = document.getElementById('user-avatar');
 
+document.getElementById('get-token').href = `https://anilist.co/api/v2/oauth/authorize?client_id=${anilist_client_id}&response_type=token`;
+
 const tokenSearchBox = document.getElementById('token-search-box');
 
 const setTokenButton = document.getElementById('set-token');

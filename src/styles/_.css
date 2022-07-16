@@ -15,6 +15,7 @@
 
 html, body, * {
     font-family: Inter;
+    box-sizing: border-box;
 }
 
 .orange {
