@@ -206,7 +206,7 @@ function getCurrentAnime(tab_title) {
                     diceCoefficient(tab_title, english)
                 );
 
-                if (sim > 0.35 && sim > max_similarity) {
+                if ((sim > 0.35 && sim > max_similarity) || (tab_title.includes(romaji) || (english.length > 0 && tab_title.includes(english)))) {
                     max_similarity = sim;
                     anime = val[i];
                 }
