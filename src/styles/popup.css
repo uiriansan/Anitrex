@@ -255,7 +255,6 @@ p.anime-genres> span.is-anime-adult {
 #current-anime-container > #current-anime-info {
     height: 100%;
     display: flex;
-    padding: 15px 0;
     flex-direction: column;
     justify-content: space-between;
 }
