@@ -43,6 +43,7 @@ async function getSearchResults() {
         if (query.length === 0) {
             const element_string = drawAnimeList(matching_titles);
             anime_list_container.innerHTML = element_string;
+            return;
         }
 
         for (let i = 0; i < full_list.length; i++) {
