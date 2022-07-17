@@ -19,7 +19,7 @@ function findAnimeInLocalList(anime_id) {
     let list = null;
 
     Object.values(anime_list).forEach(val => {
-        const t = val.find(x => x.media.id === anime_id);
+        const t = val.find(x => x.media.id == anime_id);
         if (t) {
             list = t.status;
         }
@@ -153,7 +153,16 @@ async function addAnimeToList(event) {
     }
 
     t.innerHTML = '<i class="bx bx-check"></i>';
+
     let local_anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
+    const anime_already_on_list = findAnimeInLocalList(anime_id);
+
+    console.log(anime_already_on_list);
+    if (anime_already_on_list != null) {
+        const old_entry_index = local_anime_list[anime_already_on_list].findIndex(x => x.media.id == anime_id);
+        local_anime_list[anime_already_on_list].splice(old_entry_index, 1);
+    }
+
     local_anime_list[response.status].push(response);
     localStorage.setItem('anitrex-anime-list', JSON.stringify(local_anime_list));
 
