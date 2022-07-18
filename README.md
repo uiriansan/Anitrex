@@ -20,8 +20,6 @@ Anime tracking extension for Chrome/Edge that uses AniList API.
 5. Click ```Get token```, copy the text and paste into ```AniList token``` field;
 6. Click ```Set token```. You should see your avatar and username refreshing the page;
 
-> Some features may not work on local pages likes home, settings and extensions. If you know the reason, feel free to create a [New issue](https://github.com/uiriansan/Anitrex/issues/new).
-
 
 ---
 > Icon: [Bai Qu: Hundreds of Melodies on Steam](https://steamcommunity.com/market/search?appid=753&category_753_Game%5B%5D=tag_app_516600&q=emoticons)

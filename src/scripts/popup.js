@@ -157,7 +157,6 @@ async function addAnimeToList(event) {
     let local_anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
     const anime_already_on_list = findAnimeInLocalList(anime_id);
 
-    console.log(anime_already_on_list);
     if (anime_already_on_list != null) {
         const old_entry_index = local_anime_list[anime_already_on_list].findIndex(x => x.media.id == anime_id);
         local_anime_list[anime_already_on_list].splice(old_entry_index, 1);
@@ -174,19 +173,24 @@ async function addAnimeToList(event) {
 
 document.addEventListener('DOMContentLoaded', async (e) => {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-    let result;
-    try {
-        [{result}] = await chrome.scripting.executeScript({
-            target: {tabId: tab.id},
-            function: () => getSelection().toString().toLowerCase(),
-        });
-    } catch (e) {
-        return;
-    }
-    searchBox.value = result;
 
-    if (result.length > 0) getSearchResults();
-    getCurrentAnime(tab.title);
+    if (tab && !tab.url.startsWith('edge://') && !tab.url.startsWith('chrome://')) {
+        let result;
+        try {
+            [{result}] = await chrome.scripting.executeScript({
+                target: {tabId: tab.id},
+                function: () => getSelection().toString().toLowerCase(),
+            });
+        } catch (e) {
+            return;
+        }
+        searchBox.value = result;
+
+        if (result.length > 0) getSearchResults();
+        getCurrentAnime(tab.title.toLowerCase());
+    } else {
+        getCurrentAnime();
+    }
 });
 
 searchBox.onkeyup = delay((e) => {
