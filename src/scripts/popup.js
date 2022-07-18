@@ -206,20 +206,37 @@ function getCurrentAnime(tab_title) {
         let anime = {};
         let max_similarity = 0;
 
+        tab_title = tab_title.replaceAll(' - ', '');
+        tab_title = tab_title.replace('(hd)', '');
+        tab_title = tab_title.replace('(fhd)', '');
+        tab_title = tab_title.replace('anime yabu', '');
+
+        console.log(tab_title);
+
         Object.values(anime_list).forEach(val => {
             for (let i = 0; i < val.length; i++) {
-                const romaji = val[i].media.title.romaji.toLowerCase();
-                const english = val[i].media.title.english != null ? val[i].media.title.english.toLowerCase() : '';
+                let romaji = val[i].media.title.romaji.toLowerCase();
+                let english = val[i].media.title.english != null ? val[i].media.title.english.toLowerCase() : '';
+
+                romaji = romaji.replace('nd season', '');
+                romaji = romaji.replace('rd season', '');
+                romaji = romaji.replace('st season', '');
+                romaji = romaji.replace('th season', '');
+                english = english.replace('nd season', '');
+                english = english.replace('rd season', '');
+                english = english.replace('st season', '');
+                english = english.replace('th season', '');
 
                 // Tested with 'Dice Coefficient' and 'Levenshtein distance'. BOTH SUCKS.
                 // diceCoefficient('Arquivos Naruto - Anime Yabu', 'NARUTO') === 0 ??????????????????????????, and with lowercase "naruto" === 0.32
                 //TODO-> https://stackoverflow.com/questions/3576211/what-string-similarity-algorithms-are-there
+
                 const sim = Math.max(
                     diceCoefficient(tab_title, romaji),
                     diceCoefficient(tab_title, english)
                 );
 
-                if ((sim > 0.35 && sim > max_similarity) || (tab_title.includes(romaji) || (english.length > 0 && tab_title.includes(english)))) {
+                if (sim > 0.35 && sim > max_similarity || (max_similarity === 0 && (tab_title.includes(romaji) || (english.length > 0 && tab_title.includes(english))))) {
                     max_similarity = sim;
                     anime = val[i];
                 }
