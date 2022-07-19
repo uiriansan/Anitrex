@@ -25,8 +25,27 @@
         </div>
         <div class="search">
             <p>Paste the text provided by AniList below:</p>
-            <input id="token-search-box" placeholder="AniList token" />
+            <input id="token-search-box" placeholder="AniList token" class="anitrex-input" />
             <button id="set-token"><i class='bx bx-check' ></i> Set token</button> <p id="request-message"></p>
+        </div>
+
+        <hr>
+
+        <div class="color">
+            <h3>Primary color</h3>
+            <div class="color-picker-container">
+                <label for="color-picker" id="color-code"></label>
+                <input type="color" id="color-picker" name="color_picker" />
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="filters">
+            <h3>Page title filters</h3>
+            <p>Anitrex uses the current tab title to show you the right anime when popup opens. If you want to ignore part of the title to refine the search, just type it bellow and press [ENTER].</p>
+            <input id="filter-input" placeholder="Filter | E.g.: - AniMixPlay" class="anitrex-input" />
+            <div id="filter-list"></div>
         </div>
     </main>
 

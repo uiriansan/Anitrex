@@ -13,13 +13,18 @@
     src: url(fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf);
 }
 
+:root {
+    --primary-color: transparent;
+    --secondary-color: transparent;
+}
+
 html, body, * {
     font-family: Inter;
     box-sizing: border-box;
 }
 
 .orange {
-    color: #FF7A00;
+    color: var(--primary-color);
 }
 .white-bold {
     color: white;

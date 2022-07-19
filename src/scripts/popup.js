@@ -1,3 +1,12 @@
+let colors = JSON.parse(localStorage.getItem('anitrex-colors'));
+
+if (!colors) {
+    colors.primary = '#FF7A00';
+    colors.secondary = '#FF5C00';
+}
+document.documentElement.style.setProperty('--primary-color', colors.primary);
+document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+
 if (!localStorage.getItem('anitrex-anilist-token')) {
     document.querySelector('main#popup > *').style.display = 'none';
     document.querySelector('main#popup').style.height = '100px';
@@ -206,10 +215,11 @@ function getCurrentAnime(tab_title) {
         let anime = {};
         let max_similarity = 0;
 
-        tab_title = tab_title.replaceAll(' - ', '');
-        tab_title = tab_title.replace('(hd)', '');
-        tab_title = tab_title.replace('(fhd)', '');
-        tab_title = tab_title.replace('anime yabu', '');
+        const filter_list = JSON.parse(localStorage.getItem('anitrex-filter-list'));
+
+        filter_list.forEach((filter, i) => {
+            tab_title = tab_title.replaceAll(filter.toLowerCase(), '');
+        });
 
         console.log(tab_title);
 
@@ -236,7 +246,8 @@ function getCurrentAnime(tab_title) {
                     diceCoefficient(tab_title, english)
                 );
 
-                if (sim > 0.35 && sim > max_similarity || (max_similarity === 0 && (tab_title.includes(romaji) || (english.length > 0 && tab_title.includes(english))))) {
+                // > 0.35 previous
+                if (sim > 0.62 && sim > max_similarity || (max_similarity === 0 && (tab_title.includes(romaji) || (english.length > 0 && tab_title.includes(english))))) {
                     max_similarity = sim;
                     anime = val[i];
                 }
