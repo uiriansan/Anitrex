@@ -1,12 +1,18 @@
+> English | [Português](https://github.com/uiriansan/Anitrex/blob/master/README_br.md)
+>
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/uiriansan/Anitrex/blob/master/cover_dark.png">
     <img alt="Fox icons created by Freepik - Flaticon" src="https://github.com/uiriansan/Anitrex/blob/master/cover_light.png">
 </picture>
 
-> [Installation guide](#installation)
->
+### Documentation
+- [Features](https://github.com/uiriansan/Anitrex/blob/master/pres.gif)
+- [Installation guide](#installation)
+- [Fox Icon](#icon)
 
-![](https://github.com/uiriansan/Anitrex/blob/master/pres.gif)
+<br/>
+
+https://github.com/uiriansan/Anitrex/blob/master/presentation.mov
 
 ## Installation
 1. Clone this repo;
@@ -19,10 +25,10 @@
 1. Go to [AniList API Clients](https://anilist.co/settings/developer), create a new client and copy your ID;
 2. Rename ```/src/scripts/anilist_clientid copy.js``` to ```/src/scripts/anilist_clientid.js```;
 3. Open ```anilist_clientid.js``` and replace "YOUR_ANILIST_CLIENT_ID" by your ID;
-4. Right click extension icon and select ```Extension options```;
+4. Right click extension icon and select ```Options```;
 5. Click ```Get token```, copy the text and paste into ```AniList token``` field;
 6. Click ```Set token```. You should see your avatar and username refreshing the page;
 
 
 ---
-> Icon: [Fox icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/fox)
+### Icon [Fox icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/fox)

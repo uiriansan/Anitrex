@@ -1,11 +1,12 @@
-let colors = JSON.parse(localStorage.getItem('anitrex-colors'));
+let primary_color = '#FF7A00', secondary_color = '#FF5C00';
+const colors = JSON.parse(localStorage.getItem('anitrex-colors'));
 
-if (!colors) {
-    colors.primary = '#FF7A00';
-    colors.secondary = '#FF5C00';
+if (colors && colors != null) {
+    primary_color = colors.primary;
+    secondary_color = colors.secondary;
 }
-document.documentElement.style.setProperty('--primary-color', colors.primary);
-document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+document.documentElement.style.setProperty('--primary-color', primary_color);
+document.documentElement.style.setProperty('--secondary-color', secondary_color);
 
 if (!localStorage.getItem('anitrex-anilist-token')) {
     document.querySelector('main#popup > *').style.display = 'none';
@@ -471,6 +472,7 @@ function handleAnimeListExpansion() {
         anime_list_container.style.display = 'none'
         footer.style.position = 'relative';
 
+        loader.style.display = 'none';
         searchBox.focus();
         searchBox.value = '';
     }
