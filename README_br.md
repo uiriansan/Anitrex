@@ -12,7 +12,7 @@
 
 <br/>
 
-https://github.com/uiriansan/Anitrex/blob/master/presentation.mov
+https://user-images.githubusercontent.com/46610810/179843252-bfad6bf7-5b3f-4d73-9a62-9db2e1bbae04.mov
 
 ## Instalação
 1. Clone este repositório;
