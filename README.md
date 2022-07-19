@@ -1,5 +1,8 @@
-# Anitrex
-Anime tracking extension for Chrome/Edge that uses AniList API.
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/uiriansan/Anitrex/blob/master/cover_dark.png">
+    <img alt="Fox icons created by Freepik - Flaticon" src="https://github.com/uiriansan/Anitrex/blob/master/cover_light.png">
+</picture>
+
 > [Installation guide](#installation)
 >
 
@@ -22,4 +25,4 @@ Anime tracking extension for Chrome/Edge that uses AniList API.
 
 
 ---
-> Icon: [Bai Qu: Hundreds of Melodies on Steam](https://steamcommunity.com/market/search?appid=753&category_753_Game%5B%5D=tag_app_516600&q=emoticons)
+> Icon: [Fox icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/fox)

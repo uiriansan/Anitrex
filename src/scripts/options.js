@@ -13,7 +13,7 @@ const refreshLocalAnimeListBtn = document.getElementById('update-list-button');
 const color_picker = document.getElementById('color-picker');
 
 if (!localStorage.getItem('anitrex-colors')) {
-    localStorage.setItem('anitrex-colors', JSON.stringify({primary: '#FF7A00', secondary: '#FF5C00'}))
+    localStorage.setItem('anitrex-colors', JSON.stringify({primary: '#FF5C00', secondary: shadeColor('#ff5c00', -15)}))
 }
 
 const colors = JSON.parse(localStorage.getItem('anitrex-colors'));

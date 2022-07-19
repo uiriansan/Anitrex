@@ -333,6 +333,16 @@ main#popup > div#anime-list {
     display: none;
 }
 
+main#popup > div#anime-list::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: #212129;
+    height: 65px;
+    width: 100%;
+}
+
 details > summary {
     cursor: pointer;
 }
