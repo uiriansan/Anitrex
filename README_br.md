@@ -5,14 +5,14 @@
     <img alt="Fox icons created by Freepik - Flaticon" src="https://github.com/uiriansan/Anitrex/blob/master/cover_light.png">
 </picture>
 
-### Documentation
-- [Funções](https://github.com/uiriansan/Anitrex/blob/master/pres.gif)
-- [Guia de instalação](#installation)
-- [Ícone](#icon)
+### Documentação
+- [Guia de instalação](#instalação)
 
 <br/>
 
 https://user-images.githubusercontent.com/46610810/179843252-bfad6bf7-5b3f-4d73-9a62-9db2e1bbae04.mov
+
+---
 
 ## Instalação
 1. Clone este repositório;

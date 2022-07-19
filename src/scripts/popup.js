@@ -256,7 +256,7 @@ function getCurrentAnime(tab_title) {
         });
 
         if (Object.keys(anime).length === 0) {
-            getCurrentAnime();
+            return getCurrentAnime();
         } else {
             current_anime = anime;
         }
