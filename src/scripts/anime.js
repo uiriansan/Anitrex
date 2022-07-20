@@ -132,6 +132,8 @@ function getAuthenticatedUserInfo() {
             localStorage.setItem('anitrex-anilist-user-name', data.Viewer.name);
             localStorage.setItem('anitrex-anilist-user-id', data.Viewer.id);
             localStorage.setItem('anitrex-anilist-user-avatar', data.Viewer.avatar.large);
+
+            getAnimeList();
         });
     } catch (err) {
         console.log(err);

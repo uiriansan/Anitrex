@@ -1,4 +1,4 @@
-const settings = JSON.parse(localStorage.getItem('anitrex-settings')) || null;
+const settings = JSON.parse(localStorage.getItem('anitrex-settings')) || {};
 
 let primary_color = '#FF7A00', secondary_color = '#FF5C00';
 if (settings.colors && settings.colors != null) {
@@ -182,18 +182,20 @@ async function addAnimeToList(event) {
 }
 
 document.addEventListener('DOMContentLoaded', async (e) => {
-    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+    if (localStorage.getItem('anitrex-anilist-token') && localStorage.getItem('anitrex-settings')) {
+        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
 
-    if (settings.fast_search) {
-        const selection = await getPageSelection(tab);
-        searchBox.value = selection;
-        if (selection.length > 0) getSearchResults();
-    }
+        if (settings.fast_search) {
+            const selection = await getPageSelection(tab);
+            searchBox.value = selection;
+            if (selection.length > 0) getSearchResults();
+        }
 
-    if (settings.use_tab_title) {
-        getCurrentAnime(tab.title.toLowerCase());
-    } else {
-        getCurrentAnime();
+        if (settings.use_tab_title) {
+            getCurrentAnime(tab.title.toLowerCase());
+        } else {
+            getCurrentAnime();
+        }
     }
 });
 
@@ -218,11 +220,13 @@ function getPageSelection(tab) {
     });
 }
 
-searchBox.onkeyup = delay((e) => {
-    searchResults.style.padding = '15px';
-    loader.style.display = 'block';
-    getSearchResults();
-}, 500);
+if (searchBox) {
+    searchBox.onkeyup = delay((e) => {
+        searchResults.style.padding = '15px';
+        loader.style.display = 'block';
+        getSearchResults();
+    }, 500);
+}
 
 function getCurrentAnime(tab_title) {
     let current_anime = {};
@@ -288,11 +292,17 @@ function getCurrentAnime(tab_title) {
         <button title="Increment episodes" class="episode-button" id="current-anime-increment-episodes" data-anime="${current_anime.media.id}" data-operation="INCREMENT" data-status="${current_anime.status}" data-progress="${current_anime.progress}" data-total="${current_anime.media.episodes}" ${current_anime.progress === current_anime.media.episodes ? 'disabled' : ''}><i class="bx bx-plus"></i></button>
     `;
 
+    const romajiTitleLink = `
+        <a href="${current_anime.media.isAdult ? settings.external_search_url.adult+current_anime.media.title.romaji.toLowerCase() : settings.external_search_url.common+current_anime.media.title.romaji.toLowerCase()}" id="romaji-title-link" target="_blank">
+    `;
+
     const elementString = `
     <div class="anime-result-image" style="background-image: url(${current_anime.media.coverImage.large})"></div>
     <div id="current-anime-info">
         <div id="current-anime-titles">
-            <h2 id="current-anime-romaji-title">${current_anime.media.title.romaji}</h2>
+            ${settings.external_search ? romajiTitleLink : ''}
+                <h2 id="current-anime-romaji-title">${current_anime.media.title.romaji}</h2>
+            ${settings.external_search ? '</a>' : ''}
             <h4 id="current-anime-english-title">${current_anime.media.title.english === null || current_anime.media.title.romaji.length > 36 ? '' : current_anime.media.title.english}</h4>
             <p id="current-anime-format">${current_anime.media.format != null ? current_anime.media.format : 'N/A'} - ${current_anime.media.seasonYear != null ? current_anime.media.seasonYear : 'N/A'} | ${toTitleCase(current_anime.media.status)}</p>
         </div>
@@ -493,7 +503,9 @@ function handleAnimeListExpansion() {
     }
 }
 
-expandListButton.addEventListener('click', handleAnimeListExpansion);
+if (expandListButton) {
+    expandListButton.addEventListener('click', handleAnimeListExpansion);
+}
 document.body.addEventListener('keydown', function(e) {
     if (e.key == 'Escape' && isAnimeListExpanded) {
         e.preventDefault();

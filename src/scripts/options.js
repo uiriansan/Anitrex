@@ -21,6 +21,10 @@ if (!localStorage.getItem('anitrex-settings')) {
         },
         fast_search: true,
         external_search: false,
+        external_search_url: {
+            common: '',
+            adult: ''
+        },
         use_tab_title: true,
         tab_title_filters: [
             '(hd)',
@@ -43,6 +47,11 @@ let settings = JSON.parse(localStorage.getItem('anitrex-settings'));
 
 document.getElementById('switch-fast-search').checked = settings.fast_search;
 document.getElementById('switch-tab-title').checked = settings.use_tab_title;
+document.getElementById('switch-external-search').checked = settings.external_search;
+document.getElementById('external-search-input').disabled = !settings.external_search;
+document.getElementById('adult-external-search-input').disabled = !settings.external_search;
+document.getElementById('external-search-input').value = settings.external_search_url.common;
+document.getElementById('adult-external-search-input').value = settings.external_search_url.adult;
 
 document.getElementById('switch-fast-search').addEventListener('change', (e) => {
     settings.fast_search = e.target.checked;
@@ -52,6 +61,39 @@ document.getElementById('switch-tab-title').addEventListener('change', (e) => {
     settings.use_tab_title = e.target.checked;
     localStorage.setItem('anitrex-settings', JSON.stringify(settings));
 });
+document.getElementById('switch-external-search').addEventListener('change', (e) => {
+    settings.external_search = e.target.checked;
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+    document.getElementById('external-search-input').disabled = !settings.external_search;
+    document.getElementById('adult-external-search-input').disabled = !settings.external_search;
+});
+document.getElementById('external-search-input').addEventListener('keyup', handleExternalSearchURLChange);
+document.getElementById('adult-external-search-input').addEventListener('keyup', handleExternalSearchURLChange);
+document.getElementById('set-external-search-url').addEventListener('click', (e) => {
+    const common_url = document.getElementById('external-search-input').value;
+    const adult_url = document.getElementById('adult-external-search-input').value;
+
+    settings.external_search_url.common = common_url;
+    settings.external_search_url.adult = adult_url;
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+
+    const m = document.getElementById('setting-update-external-search');
+    m.style.display = 'block';
+    m.innerHTML = 'External search URLs updated!';
+});
+
+function handleExternalSearchURLChange(event) {
+    const common_url = document.getElementById('external-search-input').value;
+    const adult_url = document.getElementById('adult-external-search-input').value;
+
+    if (common_url && adult_url && common_url.length > 0 && adult_url.length > 0) {
+        const setButton = document.getElementById('set-external-search-url');
+        setButton.style.display = 'block';
+    } else {
+        const setButton = document.getElementById('set-external-search-url');
+        setButton.style.display = 'none';
+    }
+}
 
 document.documentElement.style.setProperty('--primary-color', settings.colors.primary);
 document.documentElement.style.setProperty('--secondary-color', settings.colors.secondary);
@@ -113,14 +155,13 @@ tokenSearchBox.addEventListener('paste', (e) => {
     }
 });
 
-setTokenButton.addEventListener('click', (e) => {
+setTokenButton.addEventListener('click', async (e) => {
     if (tokenSearchBox.value.length > 0) {
         setTokenButton.disabled = true;
         const token = tokenSearchBox.value;
         
         localStorage.setItem('anitrex-anilist-token', token);
         getAuthenticatedUserInfo();
-        getAnimeList();
 
         tokenSearchBox.value = '';
         setTokenButton.style.display = 'none';

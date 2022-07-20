@@ -420,6 +420,10 @@ details.anime-list-details:not(:first-child) {
     display: flex;
 }
 
+#romaji-title-link {
+    color: white;
+    font-weight: bold;
+}
 
 
 
