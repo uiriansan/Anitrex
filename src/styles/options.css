@@ -152,19 +152,10 @@ input.anitrex-input {
 }
 
 #update-list-button {
-    height: 45px;
-    width: 45px;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    background-color: #17171D;
-    outline: none;
-    border: none;
     transition: .5s background-color;
-    display: none;
 }
 #update-list-button:hover {
-    background-color: #212129;
+    background-color: var(--secondary-color);
 }
 
 #update-list-button > i {
@@ -390,4 +381,11 @@ select {
     font-size: 13px;
     color: var(--primary-color);
     
+}
+
+.setting-update-message {
+    font-size: 14px;
+    color: var(--primary-color);
+    margin-top: 35px;
+    display: none;
 }
