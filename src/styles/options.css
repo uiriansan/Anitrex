@@ -1,6 +1,6 @@
 html, body {
     overflow-x: hidden;
-    background-color: #212129;
+    background-color: #17171D;
     color: white
 }
 
@@ -35,14 +35,72 @@ button:disabled {
 }
 
 main {
-    max-width: 700px;
-    padding: 10vh 50px;
+    padding: 5vh 25px;
+    display: flex;
+    gap: 25px;
+}
+#submenu {
+    width: 700px;
+    left: 350px;
+}
+#submenu > div {
+    width: 100%;
+}
+#submenu > div:not(:first-child) {
+    display: none;
 }
 
-@media only screen and (max-width: 400px) {
+#menu {
+    min-width: 200px;
+    width: 350px;
+}
+#menu > ul {
+    margin-top: 50px;
+    list-style: none;
+    padding: 0;
+}
+#menu > ul > li {
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 25px 25px;
+    cursor: pointer;
+}
+#menu > ul > li:hover {
+    background-color: #212129;
+}
+#menu > ul > li.selected {
+    background-color: #212129;
+    color: var(--primary-color);
+}
+
+.option-box {
+    padding: 25px 25px;
+    background-color: #212129;
+    border-radius: 10px;
+    width: 100%;
+}
+
+@media only screen and (max-width: 660px) {
     main {
-        padding: 10vh 0px;
+        flex-wrap: wrap;
     }
+    #menu {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 420px) {
+    main {
+        padding: 10vh 8px;
+    }
+}
+@media only screen and (max-width: 385px) {
+    .option-box {
+        padding: 25px 0px;
+    }
+}
+
+.option-box:not(:first-child) {
+    margin-top: 25px;
 }
 
 .header {
@@ -51,14 +109,14 @@ main {
     align-items: center;
 }
 
-.header h3, .filters h3, .color h3 {
+h3 {
     font-size: 18px;
     font-weight: bold;
 }
 
 #info {
     display: none;
-    margin: 25px 0;
+    justify-content: space-between;
     color: lightgray;
 }
 
@@ -66,8 +124,8 @@ main {
     margin-top: 35px;
 }
 
-.search p, .filters p {
-    font-size: 14px;
+p {
+    font-size: 13px;
 }
 
 input.anitrex-input {
@@ -94,19 +152,10 @@ input.anitrex-input {
 }
 
 #update-list-button {
-    height: 45px;
-    width: 45px;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    background-color: #17171D;
-    outline: none;
-    border: none;
     transition: .5s background-color;
-    display: none;
 }
 #update-list-button:hover {
-    background-color: #212129;
+    background-color: var(--secondary-color);
 }
 
 #update-list-button > i {
@@ -135,7 +184,14 @@ hr {
     height: 1px;
     background: #333;
     background-image: linear-gradient(to right, #212129, #17171D, #212129);
-    margin: 50px 0;
+    margin: 25px 0;
+}
+
+.input-group {
+    margin-top: 25px;
+}
+.input-group > input {
+    margin-top: 15px;
 }
 
 .color {
@@ -229,4 +285,107 @@ input[type="color"] {
     background-color: #17171D;
     border-radius: 4px;
     border: 2px solid #212129;
+}
+
+.switch-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.switch__container {
+    width: 55px;
+}
+
+.switch {
+    visibility: hidden;
+    position: absolute;
+    margin-left: -9999px;
+}
+
+.switch+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.switch--shadow+label {
+    padding: 2px;
+    width: 55px;
+    height: 30px;
+    background-color: black;
+    border-radius: 30px;
+}
+
+.switch--shadow+label:before,
+.switch--shadow+label:after {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: "";
+}
+
+.switch--shadow+label:before {
+    right: 1px;
+    background-color: #17171D;
+    border-radius: 30px;
+    transition: background 0.4s;
+}
+
+.switch--shadow+label:after {
+    width: 30px;
+    background-color: white;
+    border-radius: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s;
+}
+
+.switch--shadow:checked+label:before {
+    background-color: var(--primary-color);
+}
+
+.switch--shadow:checked+label:after {
+    transform: translateX(25px);
+}
+
+select {
+    height: 45px;
+    width: 120px;
+    padding: 0 15px;
+    border: none;
+    outline: none;
+    background-color: #17171D;
+    color: white;
+    border-radius: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+.select-wrapper {
+    position: relative;
+}
+.select-wrapper::after {
+    pointer-events: none;
+    content: '▼';
+    font-size: .6rem;
+    position: absolute;
+    top: 18px;
+    right: 15px;
+}
+
+.todo-badge {
+    font-size: 13px;
+    color: var(--primary-color);
+    
+}
+
+.setting-update-message {
+    font-size: 14px;
+    color: var(--primary-color);
+    margin-top: 35px;
+    display: none;
 }

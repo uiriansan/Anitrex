@@ -1,9 +1,9 @@
-let primary_color = '#FF7A00', secondary_color = '#FF5C00';
-const colors = JSON.parse(localStorage.getItem('anitrex-colors'));
+const settings = JSON.parse(localStorage.getItem('anitrex-settings')) || null;
 
-if (colors && colors != null) {
-    primary_color = colors.primary;
-    secondary_color = colors.secondary;
+let primary_color = '#FF7A00', secondary_color = '#FF5C00';
+if (settings.colors && settings.colors != null) {
+    primary_color = settings.colors.primary;
+    secondary_color = settings.colors.secondary;
 }
 document.documentElement.style.setProperty('--primary-color', primary_color);
 document.documentElement.style.setProperty('--secondary-color', secondary_color);
@@ -184,24 +184,39 @@ async function addAnimeToList(event) {
 document.addEventListener('DOMContentLoaded', async (e) => {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
 
-    if (tab && !tab.url.startsWith('edge://') && !tab.url.startsWith('chrome://') && !tab.url.startsWith('extension://')) {
-        let result;
-        try {
-            [{result}] = await chrome.scripting.executeScript({
-                target: {tabId: tab.id},
-                function: () => getSelection().toString().toLowerCase(),
-            });
-        } catch (e) {
-            return;
-        }
-        searchBox.value = result;
+    if (settings.fast_search) {
+        const selection = await getPageSelection(tab);
+        searchBox.value = selection;
+        if (selection.length > 0) getSearchResults();
+    }
 
-        if (result.length > 0) getSearchResults();
+    if (settings.use_tab_title) {
         getCurrentAnime(tab.title.toLowerCase());
     } else {
         getCurrentAnime();
     }
 });
+
+function getPageSelection(tab) {
+    return new Promise(async (resolve, reject) => {
+        // executeScript() doesn't work in some places
+        // edge:// | chrome:// | extension:// | chrome-extension://
+        if (tab && (tab.url.startsWith('http://') || tab.url.startsWith('https://'))) {
+            let result;
+            try {
+                [{result}] = await chrome.scripting.executeScript({
+                    target: {tabId: tab.id},
+                    function: () => getSelection().toString().toLowerCase(),
+                });
+            } catch (e) {
+                resolve('');
+            }
+            resolve(result);
+        } else {
+            resolve('');
+        }
+    });
+}
 
 searchBox.onkeyup = delay((e) => {
     searchResults.style.padding = '15px';
@@ -216,7 +231,7 @@ function getCurrentAnime(tab_title) {
         let anime = {};
         let max_similarity = 0;
 
-        const filter_list = JSON.parse(localStorage.getItem('anitrex-filter-list'));
+        const filter_list = settings.tab_title_filters;
 
         filter_list.forEach((filter, i) => {
             tab_title = tab_title.replaceAll(filter.toLowerCase(), '');

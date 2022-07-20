@@ -12,50 +12,79 @@ const refreshLocalAnimeListBtn = document.getElementById('update-list-button');
 
 const color_picker = document.getElementById('color-picker');
 
-if (!localStorage.getItem('anitrex-colors')) {
-    localStorage.setItem('anitrex-colors', JSON.stringify({primary: '#FF5C00', secondary: shadeColor('#ff5c00', -15)}))
+if (!localStorage.getItem('anitrex-settings')) {
+    const settings = {
+        language: 'en',
+        colors: {
+            primary: '#FF5C00',
+            secondary: shadeColor('#ff5c00', -15)
+        },
+        fast_search: true,
+        external_search: false,
+        use_tab_title: true,
+        tab_title_filters: [
+            '(hd)',
+            '(fhd)',
+            'anime yabu',
+            'AniMixPlay',
+            'BetterAnime',
+            'Episódio',
+            'hd',
+            'full hd',
+            'até',
+            '(TV)',
+            'assistir'
+        ]
+    };
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
 }
 
-const colors = JSON.parse(localStorage.getItem('anitrex-colors'));
-document.documentElement.style.setProperty('--primary-color', colors.primary);
-document.documentElement.style.setProperty('--secondary-color', colors.secondary);
-document.getElementById('color-code').innerHTML = colors.primary.toUpperCase();
-color_picker.value = colors.primary;
+let settings = JSON.parse(localStorage.getItem('anitrex-settings'));
+
+document.getElementById('switch-fast-search').checked = settings.fast_search;
+document.getElementById('switch-tab-title').checked = settings.use_tab_title;
+
+document.getElementById('switch-fast-search').addEventListener('change', (e) => {
+    settings.fast_search = e.target.checked;
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+});
+document.getElementById('switch-tab-title').addEventListener('change', (e) => {
+    settings.use_tab_title = e.target.checked;
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+});
+
+document.documentElement.style.setProperty('--primary-color', settings.colors.primary);
+document.documentElement.style.setProperty('--secondary-color', settings.colors.secondary);
+document.getElementById('color-code').innerHTML = settings.colors.primary.toUpperCase();
+color_picker.value = settings.colors.primary;
 
 if (localStorage.getItem('anitrex-anilist-token')) {
-    info.style.display = 'block';
+    info.style.display = 'flex';
     userName.innerHTML = localStorage.getItem('anitrex-anilist-user-name') + ' (' + localStorage.getItem('anitrex-anilist-user-id') + ')';
     userAvatar.src = localStorage.getItem('anitrex-anilist-user-avatar');
     setTokenButton.innerHTML = '<i class="bx bx-check" ></i> Update token';
 }
 
 if (localStorage.getItem('anitrex-anime-list')) {
-    refreshLocalAnimeListBtn.style.display = 'block';
+    document.getElementById('update-anime-list-box').style.display = 'block';
 }
 
-if (localStorage.getItem('anitrex-filter-list')) {
-    drawFilters();
-} else {
-    const list = [
-        '(hd)',
-        '(fhd)',
-        'anime yabu',
-        'AniMixPlay',
-        'BetterAnime',
-        'Episódio',
-        'hd',
-        'full hd',
-        'até',
-        '(TV)',
-        'assistir'
-    ];
+drawFilters();
 
-    localStorage.setItem('anitrex-filter-list', JSON.stringify(list));
-    drawFilters();
+function drawSubmenu() {
+    const selected = document.querySelector('#menu > ul > li.selected');
+
+    if (selected) {
+        document.querySelectorAll('#submenu > div').forEach((el, i) => {
+            el.style.display = 'none';
+        });
+        const s = document.querySelector(`#submenu > #${selected.dataset.for}`);
+        if (s != null) s.style.display = 'block';
+    }
 }
 
 function drawFilters() {
-    const list = JSON.parse(localStorage.getItem('anitrex-filter-list'));
+    const list = settings.tab_title_filters;
     let el_string = '';
 
     list.forEach((el, i) => {
@@ -68,10 +97,9 @@ function drawFilters() {
         el.addEventListener('click', (e) => {
             const entry = e.currentTarget.dataset.entry;
 
-            let list = JSON.parse(localStorage.getItem('anitrex-filter-list'));
             if (i > -1) {
-                list.splice(entry, i);
-                localStorage.setItem('anitrex-filter-list', JSON.stringify(list));
+                settings.tab_title_filters.splice(entry, 1);
+                localStorage.setItem('anitrex-settings', JSON.stringify(settings));
                 drawFilters();
             }
         });
@@ -86,38 +114,38 @@ tokenSearchBox.addEventListener('paste', (e) => {
 });
 
 setTokenButton.addEventListener('click', (e) => {
-    setTokenButton.disabled = true;
-    const token = tokenSearchBox.value;
-    
-    localStorage.setItem('anitrex-anilist-token', token);
-    getAuthenticatedUserInfo();
-    getAnimeList();
+    if (tokenSearchBox.value.length > 0) {
+        setTokenButton.disabled = true;
+        const token = tokenSearchBox.value;
+        
+        localStorage.setItem('anitrex-anilist-token', token);
+        getAuthenticatedUserInfo();
+        getAnimeList();
 
-    tokenSearchBox.value = '';
-    setTokenButton.style.display = 'none';
-    setTokenButton.disabled = false;
+        tokenSearchBox.value = '';
+        setTokenButton.style.display = 'none';
+        setTokenButton.disabled = false;
 
-    const m = document.getElementById('request-message');
-    m.style.color = 'green';
-    m.innerHTML = 'Token updated!';
+        const m = document.getElementById('setting-update-change-token');
+        m.style.display = 'block';
+        m.innerHTML = 'AniList token updated!';
+    }
 });
 
 refreshLocalAnimeListBtn.addEventListener('click', (e) => {
     refreshLocalAnimeListBtn.disabled = true;
     getAnimeList();
-    const m = document.getElementById('request-message');
-    m.style.color = 'green';
-    m.innerHTML = 'Local anime list updated!';
+    const m = document.getElementById('setting-update-update-anime-list');
+    m.style.display = 'block';
+    m.innerHTML = 'Anime list updated!';
 });
 
 const filter_input = document.getElementById('filter-input');
 filter_input.addEventListener('keyup', (e) => {
     if (e.key == 'Enter' && filter_input.value.length > 0) {
-        let list = JSON.parse(localStorage.getItem('anitrex-filter-list'));
-
-        list.push(filter_input.value);
-        localStorage.setItem('anitrex-filter-list', JSON.stringify(list));    
-        filter_input.value = '';    
+        settings.tab_title_filters.push(filter_input.value);
+        localStorage.setItem('anitrex-settings', JSON.stringify(settings));    
+        filter_input.value = '';
         drawFilters();
     }
 });
@@ -149,5 +177,18 @@ color_picker.addEventListener('change', (e) => {
     const new_primary_color = color_picker.value;
     let new_secondary_color = shadeColor(new_primary_color, -15);
 
-    localStorage.setItem('anitrex-colors', JSON.stringify({primary: new_primary_color, secondary: new_secondary_color}));
+    settings.colors.primary = new_primary_color;
+    settings.colors.secondary = new_secondary_color;
+
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+    document.documentElement.style.setProperty('--primary-color', settings.colors.primary);
+    document.documentElement.style.setProperty('--secondary-color', settings.colors.secondary);
+});
+
+document.querySelectorAll('#menu > ul > li').forEach((el, i) => {
+    el.addEventListener('click', (e) => {
+        document.querySelector('#menu > ul > li.selected').classList.remove('selected');
+        e.currentTarget.classList.add('selected');
+        drawSubmenu();
+    });
 });
