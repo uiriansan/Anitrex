@@ -1,6 +1,6 @@
 html, body {
     overflow-x: hidden;
-    background-color: #212129;
+    background-color: #17171D;
     color: white
 }
 
@@ -36,13 +36,28 @@ button:disabled {
 
 main {
     max-width: 700px;
-    padding: 10vh 50px;
+    padding: 5vh 25px;
 }
 
-@media only screen and (max-width: 400px) {
+.option-box {
+    padding: 25px 25px;
+    background-color: #212129;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 420px) {
     main {
-        padding: 10vh 0px;
+        padding: 10vh 8px;
     }
+}
+@media only screen and (max-width: 385px) {
+    .option-box {
+        padding: 25px 0px;
+    }
+}
+
+.option-box:not(:first-child) {
+    margin-top: 25px;
 }
 
 .header {
@@ -51,7 +66,7 @@ main {
     align-items: center;
 }
 
-.header h3, .filters h3, .color h3 {
+h3 {
     font-size: 18px;
     font-weight: bold;
 }
@@ -66,8 +81,8 @@ main {
     margin-top: 35px;
 }
 
-.search p, .filters p {
-    font-size: 14px;
+p {
+    font-size: 13px;
 }
 
 input.anitrex-input {
@@ -135,7 +150,14 @@ hr {
     height: 1px;
     background: #333;
     background-image: linear-gradient(to right, #212129, #17171D, #212129);
-    margin: 50px 0;
+    margin: 25px 0;
+}
+
+.input-group {
+    margin-top: 25px;
+}
+.input-group > input {
+    margin-top: 15px;
 }
 
 .color {

@@ -184,7 +184,7 @@ async function addAnimeToList(event) {
 document.addEventListener('DOMContentLoaded', async (e) => {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
 
-    if (tab && !tab.url.startsWith('edge://') && !tab.url.startsWith('chrome://') && !tab.url.startsWith('extension://')) {
+    if (tab && !tab.url.startsWith('edge://') && !tab.url.startsWith('chrome://') && !tab.url.startsWith('extension://') && !tab.url.startsWith('chrome-extension://')) {
         let result;
         try {
             [{result}] = await chrome.scripting.executeScript({

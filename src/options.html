@@ -11,41 +11,62 @@
 </head>
 <body>
     <main>
-        <div class="header">
-            <h3>AniList Token</h3>
-            <div class="right-header">
-                <button class="button" id="update-list-button" title="Update local anime list"><i class='bx bx-refresh'></i></button>
-                <a id="get-token" class="button" href="" target="_blank">
-                    <i class='bx bx-link-external'></i> Get token</a>
+        <img src="img/icon128.png" width="50px" />
+        <div class="option-box">
+            <div class="header">
+                <h3>AniList Token</h3>
+                <div class="right-header">
+                    <button class="button" id="update-list-button" title="Update local anime list"><i class='bx bx-refresh'></i></button>
+                    <a id="get-token" class="button" href="" target="_blank">
+                        <i class='bx bx-link-external'></i> Get token</a>
+                </div>
             </div>
-        </div>
-        <div id="info">
-            <h4>AniList | Logged as:</h4>
-            <div id="info-data"><img id="user-avatar"/> <div class="orange" id="user-name"></div></div>
-        </div>
-        <div class="search">
-            <p>Paste the text provided by AniList below:</p>
-            <input id="token-search-box" placeholder="AniList token" class="anitrex-input" />
-            <button id="set-token"><i class='bx bx-check' ></i> Set token</button> <p id="request-message"></p>
-        </div>
-
-        <hr>
-
-        <div class="color">
-            <h3>Primary color</h3>
-            <div class="color-picker-container">
-                <label for="color-picker" id="color-code"></label>
-                <input type="color" id="color-picker" name="color_picker" />
+            <div id="info">
+                <h4>AniList | Logged as:</h4>
+                <div id="info-data"><img id="user-avatar"/> <div class="orange" id="user-name"></div></div>
+            </div>
+            <div class="search">
+                <p>Paste the text provided by AniList below:</p>
+                <input id="token-search-box" placeholder="AniList token" class="anitrex-input" />
+                <button id="set-token"><i class='bx bx-check' ></i> Set token</button> <p id="request-message"></p>
             </div>
         </div>
 
-        <hr>
+        <div class="option-box">
+            <div class="color">
+                <h3>Primary color</h3>
+                <div class="color-picker-container">
+                    <label for="color-picker" id="color-code"></label>
+                    <input type="color" id="color-picker" name="color_picker" />
+                </div>
+            </div>
+        </div>
 
-        <div class="filters">
-            <h3>Page title filters</h3>
-            <p>Anitrex uses the current tab title to show you the right anime when popup opens. If you want to ignore part of the title to refine the search, just type it bellow and press [ENTER].</p>
-            <input id="filter-input" placeholder="Filter | E.g.: - AniMixPlay" class="anitrex-input" />
-            <div id="filter-list"></div>
+        <div class="option-box">
+            <!-- TODO TODO TODO TODO TODO TODO -->
+            <div class="search-anime">
+                <h3>Search</h3>
+                <p>Clicking on an anime with [Ctrl] pressed (or with the middle mouse button) will open a new tab at the URL you define below, including the name of the anime right after it.</p>
+                <hr>
+                <div class="input-group">
+                    <label for="search-input">Common animes</label>
+                    <input id="search-input" placeholder="Search URL | E.g.: https://animixplay.to/?q=" class="anitrex-input" />
+                </div>
+                <div class="input-group">
+                    <label for="adult-search-input">Adult animes</label>
+                    <input id="adult-search-input" placeholder="Search URL | E.g.: https://animixplay.to/?q=" class="anitrex-input" />
+                </div>
+            </div>
+        </div>
+
+        <div class="option-box">
+            <div class="filters">
+                <h3>Tab title filters</h3>
+                <p>Anitrex uses the current tab title to show you the right anime when popup opens. If you want to ignore part of the title to refine the search, just type it bellow and press [ENTER].</p>
+                <hr>
+                <input id="filter-input" placeholder="Filter | E.g.: - AniMixPlay" class="anitrex-input" />
+                <div id="filter-list"></div>
+            </div>
         </div>
     </main>
 
