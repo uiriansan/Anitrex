@@ -11,61 +11,127 @@
 </head>
 <body>
     <main>
-        <img src="img/icon128.png" width="50px" />
-        <div class="option-box">
-            <div class="header">
-                <h3>AniList Token</h3>
-                <div class="right-header">
-                    <button class="button" id="update-list-button" title="Update local anime list"><i class='bx bx-refresh'></i></button>
-                    <a id="get-token" class="button" href="" target="_blank">
-                        <i class='bx bx-link-external'></i> Get token</a>
-                </div>
-            </div>
-            <div id="info">
-                <h4>AniList | Logged as:</h4>
-                <div id="info-data"><img id="user-avatar"/> <div class="orange" id="user-name"></div></div>
-            </div>
-            <div class="search">
-                <p>Paste the text provided by AniList below:</p>
-                <input id="token-search-box" placeholder="AniList token" class="anitrex-input" />
-                <button id="set-token"><i class='bx bx-check' ></i> Set token</button> <p id="request-message"></p>
-            </div>
+        <div id="menu">
+            <img src="img/icon128.png" width="50px" />
+            <ul>
+                <li data-for="anilist" class="selected"><i class='bx bx-barcode-reader'></i> AniList</li>
+                <li data-for="appearance"><i class='bx bxs-color-fill'></i> Appearance</li>
+                <li data-for="search"><i class='bx bx-search-alt' ></i> Search</li>
+                <li data-for="anime-list"><i class='bx bxs-bookmark' ></i> Anime list</li>
+                <li data-for="about"><i class='bx bxs-info-circle' ></i> About</li>
+            </ul>
         </div>
-
-        <div class="option-box">
-            <div class="color">
-                <h3>Primary color</h3>
-                <div class="color-picker-container">
-                    <label for="color-picker" id="color-code"></label>
-                    <input type="color" id="color-picker" name="color_picker" />
+        <div id="submenu">
+            <div id="anilist">
+                <div class="option-box" id="info">
+                    <h3>Logged as:</h3>
+                    <div id="info-data"><div class="orange" id="user-name"></div> <img id="user-avatar"/></div>
+                </div>
+                <div class="option-box">
+                    <div class="header">
+                        <h3>AniList Token</h3>
+                        <div class="right-header">
+                            <button class="button" id="update-list-button" title="Update local anime list"><i class='bx bx-refresh'></i></button>
+                            <a id="get-token" class="button" href="" target="_blank">
+                                <i class='bx bx-link-external'></i> Get token</a>
+                        </div>
+                    </div>
+                    <div class="search">
+                        <p>Paste the text provided by AniList below:</p>
+                        <input id="token-search-box" placeholder="AniList token" class="anitrex-input" />
+                        <button id="set-token"><i class='bx bx-check' ></i> Set token</button> <p id="request-message"></p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="option-box">
-            <!-- TODO TODO TODO TODO TODO TODO -->
-            <div class="search-anime">
-                <h3>Search</h3>
-                <p>Clicking on an anime with [Ctrl] pressed (or with the middle mouse button) will open a new tab at the URL you define below, including the name of the anime right after it.</p>
-                <hr>
-                <div class="input-group">
-                    <label for="search-input">Common animes</label>
-                    <input id="search-input" placeholder="Search URL | E.g.: https://animixplay.to/?q=" class="anitrex-input" />
+    
+            <div id="appearance">
+                <div class="option-box">
+                    <div class="switch-box">
+                        <h3>Language <span class="todo-badge">TODO</span></h3>
+                        <div class="select-wrapper">
+                            <select name="language" id="language-picker">
+                                <option value="en">English</option>
+                                <option value="pt">Português</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="adult-search-input">Adult animes</label>
-                    <input id="adult-search-input" placeholder="Search URL | E.g.: https://animixplay.to/?q=" class="anitrex-input" />
+                <div class="option-box">
+                    <div class="color">
+                        <h3>Primary color</h3>
+                        <div class="color-picker-container">
+                            <label for="color-picker" id="color-code"></label>
+                            <input type="color" id="color-picker" name="color_picker" />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+    
+            <div id="search">
+                <div class="option-box">
+                    <div class="switch-box">
+                        <h3>Fast search</h3>
+                        <div class="switch__container">
+                            <input id="switch-shadow" class="switch switch--shadow" type="checkbox" checked>
+                            <label for="switch-shadow"></label>
+                        </div>
+                    </div>
+                    <p>Open the popup with any text selected will automatically search for it.</p>
+                </div>
+                <div class="option-box">
+                    <!-- TODO TODO TODO TODO TODO TODO -->
+                    <div class="search-anime">
+                        <h3>External search</h3>
+                        <p>Clicking on an anime with [Ctrl] pressed (or with the middle mouse button) will open a new tab at the URL you define below, including the name of the anime right after it.</p>
+                        <hr>
+                        <div class="input-group">
+                            <label for="search-input">Common animes</label>
+                            <input id="search-input" placeholder="Search URL | E.g.: https://animixplay.to/?q=" class="anitrex-input" />
+                        </div>
+                        <div class="input-group">
+                            <label for="adult-search-input">Adult animes</label>
+                            <input id="adult-search-input" placeholder="Search URL | E.g.: https://animixplay.to/?q=" class="anitrex-input" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div id="anime-list">
+                <div class="option-box">
+                    <div class="switch-box">
+                        <h3>Update anime list</h3>
+                        <button type="button"><i class='bx bx-refresh'></i> Update</button>
+                    </div>
+                    <p>if you update your list directly from AniList website, press this button to sync the changes.</p>
+                </div>
+                <div class="option-box">
+                    <div class="switch-box">
+                        <h3>Use tab title</h3>
+                        <div class="switch__container">
+                            <input id="switch-shadow" class="switch switch--shadow" type="checkbox" checked>
+                            <label for="switch-shadow"></label>
+                        </div>
+                    </div>
+                    <p>Anitrex uses the current tab title to show you the right anime from your list when popup opens.</p>
+                </div>
+                <div class="option-box">
+                    <div class="filters">
+                        <h3>Tab title filters</h3>
+                        <p>If you want to ignore part of the tab title to refine the search, just type it bellow and press [ENTER].</p>
+                        <hr>
+                        <input id="filter-input" placeholder="Filter | E.g.: - AniMixPlay" class="anitrex-input" />
+                        <div id="filter-list"></div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="option-box">
-            <div class="filters">
-                <h3>Tab title filters</h3>
-                <p>Anitrex uses the current tab title to show you the right anime when popup opens. If you want to ignore part of the title to refine the search, just type it bellow and press [ENTER].</p>
-                <hr>
-                <input id="filter-input" placeholder="Filter | E.g.: - AniMixPlay" class="anitrex-input" />
-                <div id="filter-list"></div>
+            <div id="about">
+                <div class="option-box text-center">
+                    <h3>Anitrex <span>beta-0.1.1A</span></h4>
+                    <h3>Created by <a href="https://github.com/uiriansan" target="_blank">@uiriansan</a></h3>
+                    <p>Fox icon: <a href="https://www.flaticon.com/free-icons/fox" target="_blank">Flaticon - Freepik</a></p>
+                    <p>Other icons: <a href="https://boxicons.com/" target="_blank">Boxicons</a></p>
+                </div>
             </div>
         </div>
     </main>

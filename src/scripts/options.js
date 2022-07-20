@@ -23,7 +23,7 @@ document.getElementById('color-code').innerHTML = colors.primary.toUpperCase();
 color_picker.value = colors.primary;
 
 if (localStorage.getItem('anitrex-anilist-token')) {
-    info.style.display = 'block';
+    info.style.display = 'flex';
     userName.innerHTML = localStorage.getItem('anitrex-anilist-user-name') + ' (' + localStorage.getItem('anitrex-anilist-user-id') + ')';
     userAvatar.src = localStorage.getItem('anitrex-anilist-user-avatar');
     setTokenButton.innerHTML = '<i class="bx bx-check" ></i> Update token';
@@ -52,6 +52,18 @@ if (localStorage.getItem('anitrex-filter-list')) {
 
     localStorage.setItem('anitrex-filter-list', JSON.stringify(list));
     drawFilters();
+}
+
+function drawSubmenu() {
+    const selected = document.querySelector('#menu > ul > li.selected');
+
+    if (selected) {
+        document.querySelectorAll('#submenu > div').forEach((el, i) => {
+            el.style.display = 'none';
+        });
+        const s = document.querySelector(`#submenu > #${selected.dataset.for}`);
+        if (s != null) s.style.display = 'block';
+    }
 }
 
 function drawFilters() {
@@ -150,4 +162,12 @@ color_picker.addEventListener('change', (e) => {
     let new_secondary_color = shadeColor(new_primary_color, -15);
 
     localStorage.setItem('anitrex-colors', JSON.stringify({primary: new_primary_color, secondary: new_secondary_color}));
+});
+
+document.querySelectorAll('#menu > ul > li').forEach((el, i) => {
+    el.addEventListener('click', (e) => {
+        document.querySelector('#menu > ul > li.selected').classList.remove('selected');
+        e.currentTarget.classList.add('selected');
+        drawSubmenu();
+    });
 });
