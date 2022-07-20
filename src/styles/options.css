@@ -389,3 +389,8 @@ select {
     margin-top: 35px;
     display: none;
 }
+
+#set-external-search-url {
+    margin-top: 25px;
+    display: none;
+}
