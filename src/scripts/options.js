@@ -16,8 +16,8 @@ if (!localStorage.getItem('anitrex-settings')) {
     const settings = {
         language: 'en',
         colors: {
-            primary: '#FF5C00',
-            secondary: shadeColor('#ff5c00', -15)
+            primary: '#FB6641',
+            secondary: shadeColor('#FB6641', -15)
         },
         fast_search: true,
         external_search: false,

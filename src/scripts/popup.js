@@ -1,6 +1,6 @@
 const settings = JSON.parse(localStorage.getItem('anitrex-settings')) || {};
 
-let primary_color = '#FF7A00', secondary_color = '#FF5C00';
+let primary_color = '#FB6641', secondary_color = '#FF5C00';
 if (settings.colors && settings.colors != null) {
     primary_color = settings.colors.primary;
     secondary_color = settings.colors.secondary;
@@ -18,10 +18,11 @@ const searchBox = document.getElementById('anitrex-search-box');
 const searchResults = document.getElementById('search-results');
 const currentAnimeContainer = document.getElementById('current-anime-container');
 const expandListButton = document.getElementById('load-more-button');
-
 const loader = document.getElementById('loader');
+
 let clickTimeout;
 let isAnimeListExpanded = false;
+const recent_list = JSON.parse(localStorage.getItem('anitrex-recent-list')) || [];
 
 
 function findAnimeInLocalList(anime_id) {
@@ -127,7 +128,7 @@ async function getSearchResults() {
                         <p class="anime-score"><i class='bx bxs-star'></i> ${anime.averageScore == null ? 'N/A' : anime.averageScore} | ${anime.studios.nodes.length !== 0 ? anime.studios.nodes[0].name : 'N/A'} | ${anime.source == null ? '' : toTitleCase(anime.source.replace('_', ' '))}</p>
                         <p class="anime-genres">${anime.isAdult ? '<span class="is-anime-adult">NSFW</span>' : ''}${anime.genres.join(' • ')}</p>
                     </div>
-                    <div class="anime-result-overlay">
+                    <div class="anime-result-overlay" title="${anime.description != null ? anime.description.replace(/"|<br>/g, ``) : ''}">
                         ${overlay}
                     </div>
                 </div>`;
@@ -282,7 +283,8 @@ function getCurrentAnime(tab_title) {
     } else if (localStorage.getItem('anitrex-current-anime')) {
         current_anime = JSON.parse(localStorage.getItem('anitrex-current-anime'));
     } else {
-        current_anime = JSON.parse(localStorage.getItem('anitrex-anime-list'))['CURRENT'][0];
+        const last_watching = JSON.parse(localStorage.getItem('anitrex-anime-list'))['CURRENT'];
+        current_anime = last_watching[last_watching.length-1];
     }
 
     const decButtonString = `
@@ -422,18 +424,21 @@ function drawAnimeList(anime_list) {
 
     Object.values(organized_list).forEach((list, i) => {
         element_string += `<details class="anime-list-details" open><summary><span class="anime-list-list-name">${Object.keys(organized_list)[i]}</span><span class="anime-list-list-length">(${list.length})</span></summary>`;
-
+        list.reverse();
+        
         for (let i = 0; i < list.length; i++) {
             element_string += `
-                <div class="anime-list-list-content">
+                <div class="anime-list-list-content" title="${list[i].media.description != null ? list[i].media.description.replace(/"|<br>/g, ``) : ''}">
                     <div class="anime-list-anime-image" style="background-image: url(${list[i].media.coverImage.large})"></div>
                     <div class="anime-list-anime-titles">
                         <div>${list[i].media.title.romaji}</div>
                         <div>${list[i].media.title.english}</div>
+                        <div class="anime-list-episodes"><span class="anime-list-format">${list[i].media.format} • </span><span class="orange">${list[i].progress}</span>/${list[i].media.episodes}</div>
                     </div>
                     <div class="anime-list-overlay">
                         <div class="anime-list-episodes-controls">
-                            <button class="episode-button set-bookmark-button" title="Set as current anime" data-anime="${list[i].media.id}" data-entry="${i}" data-list="${list[i].status}"><i class='bx bxs-bookmark'></i></button>
+                            <button class="episode-button set-bookmark-button" title="Set as current anime" data-anime="${list[i].media.id}" data-entry="${i}" data-list="${list[i].status}"><i class='bx bxs-star'></i></button>
+                            <button class="episode-button delete-list-entry-button" title="Delete anime from list" data-anime="${list[i].media.id}" data-entry="${i}" data-list="${list[i].status}"><i class='bx bxs-trash'></i></button>
                         </div>
                     </div>
                 </div>
@@ -484,6 +489,9 @@ function handleAnimeListExpansion() {
         document.querySelectorAll('.set-bookmark-button').forEach((el, i) => {
             el.addEventListener('click', setAnimeAsCurrent);
         });
+        document.querySelectorAll('.delete-list-entry-button').forEach((el, i) => {
+            el.addEventListener('click', deleteAnimeFromList);
+        });
 
         searchBox.focus();
         searchBox.value = '';
@@ -501,6 +509,16 @@ function handleAnimeListExpansion() {
         searchBox.focus();
         searchBox.value = '';
     }
+}
+
+async function deleteAnimeFromList(e) {
+    console.log('af');
+    const anime_id = e.currentTarget.dataset.anime;
+    const list = e.currentTarget.dataset.list;
+    const entry = e.currentTarget.dataset.entry;
+
+    const removed = await deleteListEntry(anime_id);
+    console.log(removed);
 }
 
 if (expandListButton) {

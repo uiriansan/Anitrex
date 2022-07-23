@@ -346,18 +346,25 @@ main#popup > div#anime-list::after {
 details > summary {
     cursor: pointer;
 }
+details > summary::marker {
+    color: var(--primary-color);
+}
 
 .anime-list-list-name {
     font-size: 15px;
     font-weight: bold;
-    columns: white;
+    color: var(--primary-color);
     text-transform: uppercase;
 }
 .anime-list-list-length {
     margin-left: 5px;
     font-size: 11px;
     font-weight: 400;
-    color: rgba(255, 255, 255, .8);
+    color: var(--primary-color);
+    opacity: .7;
+}
+.anime-list-format {
+    opacity: .6;
 }
 
 details.anime-list-details:not(:first-child) {
@@ -387,10 +394,10 @@ details.anime-list-details:not(:first-child) {
 }
 .anime-list-anime-titles > div:first-child {
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
 }
-.anime-list-anime-titles > div:last-child {
-    opacity: .6;
+.anime-list-anime-titles > div:nth-child(2) {
+    opacity: .75;
 }
 
 .anime-list-overlay {
@@ -404,10 +411,16 @@ details.anime-list-details:not(:first-child) {
     border-radius: 10px;
     display: none;
 }
+.anime-list-episodes {
+    margin-top: 5px;
+}
 .anime-list-overlay > .anime-list-episodes-controls {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+.delete-list-entry-button {
+    margin-left: 8px;
 }
 .anime-list-list-content:hover {
     background-color: #17171D;

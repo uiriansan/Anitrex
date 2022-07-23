@@ -59,3 +59,9 @@ function levenshteinDistance(str1, str2) {
         }
     return track[str2.length][str1.length];
 }
+
+function addAnimeToRecent(anime) {
+    const recent_list = JSON.parse(localStorage.getItem('anitrex-recent-list'));
+
+    // Check if anime is already on list
+}
