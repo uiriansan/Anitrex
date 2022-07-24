@@ -64,6 +64,7 @@
                             <input type="color" id="color-picker" name="color_picker" />
                         </div>
                     </div>
+                    <p>The default color is #FB6641 | 251,102,65, if you wonder.</p>
                 </div>
             </div>
     
@@ -112,6 +113,17 @@
                     </div>
                     <p>if you update your list directly from AniList website, press this button to sync the changes.</p>
                     <p class="setting-update-message" id="setting-update-update-anime-list"></p>
+                </div>
+                <div class="option-box">
+                    <h3>Enabled lists</h3>
+                    <p>Choose which lists will be displayed. These settings will be ignored if you search your anime list.</p>
+                    <ul class="toggle-list-box">
+                        <li><input type="checkbox" id="toggle-recent-list" name="recent" checked><label for="toggle-recent-list">Recent</label></li>
+                        <li><input type="checkbox" id="toggle-watching-list" name="watching" checked><label for="toggle-watching-list">Watching</label></li>
+                        <li><input type="checkbox" id="toggle-planning-list" name="planning" checked><label for="toggle-planning-list">Planning</label></li>
+                        <li><input type="checkbox" id="toggle-paused-list" name="paused" checked><label for="toggle-paused-list">Paused</label></li>
+                        <li><input type="checkbox" id="toggle-completed-list" name="completed" checked><label for="toggle-completed-list">Completed</label></li>
+                    </ul>
                 </div>
                 <div class="option-box">
                     <div class="switch-box">

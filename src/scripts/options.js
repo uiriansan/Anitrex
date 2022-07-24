@@ -37,8 +37,16 @@ if (!localStorage.getItem('anitrex-settings')) {
             'full hd',
             'até',
             '(TV)',
-            'assistir'
-        ]
+            'assistir',
+            ' -'
+        ],
+        lists: {
+            recent: true,
+            watching: true,
+            planning: true,
+            paused: true,
+            completed: true
+        }
     };
     localStorage.setItem('anitrex-settings', JSON.stringify(settings));
 }
@@ -52,6 +60,11 @@ document.getElementById('external-search-input').disabled = !settings.external_s
 document.getElementById('adult-external-search-input').disabled = !settings.external_search;
 document.getElementById('external-search-input').value = settings.external_search_url.common;
 document.getElementById('adult-external-search-input').value = settings.external_search_url.adult;
+document.getElementById('toggle-recent-list').checked = settings.lists.recent;
+document.getElementById('toggle-watching-list').checked = settings.lists.watching;
+document.getElementById('toggle-planning-list').checked = settings.lists.planning;
+document.getElementById('toggle-paused-list').checked = settings.lists.paused;
+document.getElementById('toggle-completed-list').checked = settings.lists.completed;
 
 document.getElementById('switch-fast-search').addEventListener('change', (e) => {
     settings.fast_search = e.target.checked;
@@ -81,6 +94,17 @@ document.getElementById('set-external-search-url').addEventListener('click', (e)
     m.style.display = 'block';
     m.innerHTML = 'External search URLs updated!';
 });
+document.getElementById('toggle-recent-list').addEventListener('change', toggleLists);
+document.getElementById('toggle-watching-list').addEventListener('change', toggleLists);
+document.getElementById('toggle-planning-list').addEventListener('change', toggleLists);
+document.getElementById('toggle-paused-list').addEventListener('change', toggleLists);
+document.getElementById('toggle-completed-list').addEventListener('change', toggleLists);
+
+function toggleLists(event) {
+    const list = event.target.name;
+    settings.lists[list] = event.target.checked;
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+}
 
 function handleExternalSearchURLChange(event) {
     const common_url = document.getElementById('external-search-input').value;

@@ -61,7 +61,25 @@ function levenshteinDistance(str1, str2) {
 }
 
 function addAnimeToRecent(anime) {
-    const recent_list = JSON.parse(localStorage.getItem('anitrex-recent-list'));
+    let recent_list = localStorage.getItem('anitrex-recent-list');
 
-    // Check if anime is already on list
+    if (!recent_list) {
+        localStorage.setItem('anitrex-recent-list', JSON.stringify([]));
+    }
+    recent_list = JSON.parse(recent_list);
+    
+    const anime_in_recent_list = recent_list.findIndex(x => x.media.id == anime.media.id);
+    if (anime_in_recent_list === 0) {
+        return;
+    }
+
+    if (anime_in_recent_list !== -1) {
+        recent_list.splice(anime_in_recent_list, 1);
+    } else {
+        recent_list.splice(4, 1);
+    }
+
+    recent_list.unshift(anime);
+
+    localStorage.setItem('anitrex-recent-list', JSON.stringify(recent_list));
 }

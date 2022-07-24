@@ -344,10 +344,12 @@ main#popup > div#anime-list::after {
 }
 
 details > summary {
+    display: flex;
+    align-items: center;
     cursor: pointer;
 }
 details > summary::marker {
-    color: var(--primary-color);
+    display: none;
 }
 
 .anime-list-list-name {
@@ -393,7 +395,6 @@ details.anime-list-details:not(:first-child) {
     text-overflow: ellipsis;
 }
 .anime-list-anime-titles > div:first-child {
-    font-weight: 600;
     font-size: 12px;
 }
 .anime-list-anime-titles > div:nth-child(2) {
