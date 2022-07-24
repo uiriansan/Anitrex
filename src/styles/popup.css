@@ -53,6 +53,71 @@ main#popup > footer > #current-anime-container {
     background-color: #17171D;
 }
 
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper {
+    position: absolute;
+    width: 100%;
+    background-color: #17171D;
+    height: calc(100% - 45px);
+    left: -100%;
+    top: 0;
+    transition: left .5s;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper > #close-context-button {
+    width: 100%;
+    height: 35px;
+    background-color: rgba(0, 0, 0, .25);
+    display: flex;
+    justify-content: start;
+    padding: 0 15px;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper > #close-context-button > i {
+    font-size: 18px;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper > #context-menu {
+    padding: 15px;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper > #context-menu > p {
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper > #context-menu > .context-wrapper-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper > #context-menu > .context-wrapper-option:nth-child(2) {
+    margin-top: 10px;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper .option-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper .option-content {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper .option-content a {
+    color: white;
+    opacity: .75;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+main#popup > footer > #current-anime-container > #current-anime-context-wrapper .option-content a:hover {
+    color: var(--primary-color);
+    opacity: 1;
+}
+
 .anitrex-input {
     border: none;
     outline: none;
@@ -290,6 +355,7 @@ p.anime-genres> span.is-anime-adult {
     margin: 0 0 15px 0;
 }
 #current-anime-titles {
+    width: 100%;
     padding: 0;
     margin: 0;
     margin-top: 5px;
@@ -304,7 +370,7 @@ p.anime-genres> span.is-anime-adult {
     height: 30px;
     cursor: pointer;
     border-radius: 50%;
-    font-size: 16px;
+    font-size: 15px;
 }
 .episode-button:hover:enabled > i {
     color: var(--primary-color);
@@ -438,7 +504,6 @@ details.anime-list-details:not(:first-child) {
     color: white;
     font-weight: bold;
 }
-
 
 
 /* ===== Scrollbar CSS ===== */

@@ -200,6 +200,7 @@ setTokenButton.addEventListener('click', async (e) => {
 refreshLocalAnimeListBtn.addEventListener('click', (e) => {
     refreshLocalAnimeListBtn.disabled = true;
     getAnimeList();
+    localStorage.removeItem('anitrex-recent-list');
     const m = document.getElementById('setting-update-update-anime-list');
     m.style.display = 'block';
     m.innerHTML = 'Anime list updated!';

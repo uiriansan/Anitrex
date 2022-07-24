@@ -177,7 +177,7 @@ async function addAnimeToList(event) {
     localStorage.setItem('anitrex-anime-list', JSON.stringify(local_anime_list));
 
     if (response.status === 'CURRENT') {
-        localStorage.setItem('anitrex-current-anime', JSON.stringify(response));
+        addAnimeToRecent(response);
         getCurrentAnime();
     }
 }
@@ -280,8 +280,8 @@ function getCurrentAnime(tab_title) {
         } else {
             current_anime = anime;
         }
-    } else if (localStorage.getItem('anitrex-current-anime')) {
-        current_anime = JSON.parse(localStorage.getItem('anitrex-current-anime'));
+    } else if (localStorage.getItem('anitrex-recent-list') && recent_list.length > 0) {
+        current_anime = JSON.parse(localStorage.getItem('anitrex-recent-list'))[0];
     } else {
         const last_watching = JSON.parse(localStorage.getItem('anitrex-anime-list'))['CURRENT'];
         current_anime = last_watching[last_watching.length-1];
@@ -311,11 +311,56 @@ function getCurrentAnime(tab_title) {
 
         ${current_anime.media.episodes && current_anime.media.episodes != null ? '<div id="current-anime-episodes-controls">'+decButtonString+'<div><span id="current-anime-watched-episodes">'+current_anime.progress+'</span><span id="current-anime-total-episodes">/'+current_anime.media.episodes+'</span></div>'+incButtonString+' <div id="loader-mini"></div><div id="current-anime-control-error"><i class="bx bx-error-circle"></i></div></div>' : ''}
     </div>
+    <div id="current-anime-context-wrapper"></div>
     `;
     currentAnimeContainer.innerHTML = elementString;
 
     document.querySelectorAll('.episode-button').forEach((el, i) => {
         el.addEventListener('click', increaseOrDecreaseEpisode);
+    });
+    document.getElementById('current-anime-romaji-title').addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const context_menu = document.getElementById('current-anime-context-wrapper');
+        
+        const context_menu_english_link = `
+            <div class="context-wrapper-option">
+                <div class="option-title">
+                    English:
+                </div>
+                <div class="option-content">
+                    <a target="_blank" href="${settings.external_search_url.common+current_anime.media.title.english}"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${settings.external_search_url.common}&size=16" width="14px" height="14px" /> ${settings.external_search_url.common.replace(/https:\/\/|http:\/\//g, '').split('/')[0]}</a>
+                    <a target="_blank" href="${settings.external_search_url.adult+current_anime.media.title.english}"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${settings.external_search_url.adult}&size=16" width="14px" height="14px" />  ${settings.external_search_url.adult.replace(/https:\/\/|http:\/\//g, '').split('/')[0]}</a>
+                </div>
+            </div>
+        `;
+        context_menu.innerHTML = `
+        <div id="close-context-button">
+            <i class='bx bx-left-arrow-alt'></i> ${current_anime.media.title.romaji}
+        </div>
+        <div id="context-menu">
+            <p>Search title externally:</p>
+            <div class="context-wrapper-option">
+                <div class="option-title">
+                    Romaji:
+                </div>
+                <div class="option-content">
+                    <a target="_blank" href="${settings.external_search_url.common+current_anime.media.title.romaji}"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${settings.external_search_url.common}&size=16" width="14px" height="14px" /> ${settings.external_search_url.common.replace(/https:\/\/|http:\/\//g, '').split('/')[0]}</a>
+                    <a target="_blank" href="${settings.external_search_url.adult+current_anime.media.title.romaji}"><img src="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${settings.external_search_url.adult}&size=16" width="14px" height="14px" />  ${settings.external_search_url.adult.replace(/https:\/\/|http:\/\//g, '').split('/')[0]}</a>
+                </div>
+            </div>
+            ${current_anime.media.title.english && current_anime.media.title.english != null && current_anime.media.title.english !== current_anime.media.title.romaji ? context_menu_english_link : ''}
+        </div>
+        `;
+        context_menu.style.left = '0px';
+
+        document.addEventListener('click', closeContextMenu);
+        document.addEventListener('auxclick', closeContextMenu);
+        document.getElementById('close-context-button').addEventListener('click', closeContextMenu);
+        function closeContextMenu(e) {
+            const context_menu = document.getElementById('current-anime-context-wrapper');
+            if (e.target === context_menu || (context_menu.contains(e.target) && e.target !== document.getElementById('close-context-button'))) return;
+            context_menu.style.left = '-100%';
+        }
     });
 }
 
@@ -394,8 +439,6 @@ function increaseOrDecreaseEpisode(event) {
             anime_list[new_status].push(updated_anime);
             localStorage.setItem('anitrex-anime-list', JSON.stringify(anime_list));
 
-            localStorage.setItem('anitrex-current-anime', JSON.stringify(updated_anime));
-
             addAnimeToRecent(updated_anime);
 
             current_anime_loader.style.display = 'none';
@@ -409,6 +452,33 @@ function increaseOrDecreaseEpisode(event) {
             });
         }
     }, 500);
+}
+
+function addAnimeToRecent(anime) {
+    if (!localStorage.getItem('anitrex-recent-list')) {
+        localStorage.setItem('anitrex-recent-list', JSON.stringify([]));
+    }
+
+    console.log(anime.status);
+    console.log(anime.progress);
+
+    const anime_in_recent_list = recent_list.findIndex(x => x.media.id == anime.media.id);
+    if (anime_in_recent_list === 0) {
+        recent_list[0].progress = anime.progress;
+        recent_list[0].status = anime.status;
+        localStorage.setItem('anitrex-recent-list', JSON.stringify(recent_list));
+        return;
+    }
+
+    if (anime_in_recent_list !== -1) {
+        recent_list.splice(anime_in_recent_list, 1);
+    } else {
+        recent_list.splice(4, 1);
+    }
+
+    recent_list.unshift(anime);
+
+    localStorage.setItem('anitrex-recent-list', JSON.stringify(recent_list));
 }
 
 function drawAnimeList(anime_list) {
@@ -438,7 +508,7 @@ function drawAnimeList(anime_list) {
                     <div class="anime-list-anime-titles">
                         <div>${recent_list[i].media.title.romaji}</div>
                         <div>${recent_list[i].media.title.english}</div>
-                        <div class="anime-list-episodes"><span class="anime-list-format">${recent_list[i].media.format} • </span><span class="orange">${recent_list[i].progress}</span>/${recent_list[i].media.episodes}</div>
+                        <div class="anime-list-episodes"><span class="anime-list-format">${recent_list[i].media.format} • </span><span class="orange">${recent_list[i].progress}</span>/${recent_list[i].media.episodes} | ${toTitleCase(recent_list[i].status.replace('CURRENT', 'WATCHING'))}</div>
                     </div>
                     <div class="anime-list-overlay">
                         <div class="anime-list-episodes-controls">
@@ -487,8 +557,6 @@ function setAnimeAsCurrent(e) {
 
     const anime_list = JSON.parse(localStorage.getItem('anitrex-anime-list'));
     const entry = anime_list[list].findIndex(x => x.media.id == anime_id);
-
-    localStorage.setItem('anitrex-current-anime', JSON.stringify(anime_list[list][entry]));
 
     addAnimeToRecent(anime_list[list][entry]);
     handleAnimeListExpansion();
