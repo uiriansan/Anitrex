@@ -39,7 +39,7 @@ function getAnimeList() {
         query ($id: Int, $type: MediaType) {MediaListCollection (userId: $id, type: $type) {
             lists { name isCustomList isSplitCompletedList status entries {
                 id media {
-                    id idMal title { romaji english } episodes format seasonYear status source coverImage { large medium } isFavourite isAdult
+                    id idMal title { romaji english } episodes format seasonYear status source coverImage { large medium } description isFavourite isAdult
                 }
                 status score progress repeat priority private notes hiddenFromStatusLists startedAt { year month day } completedAt { year month day } updatedAt createdAt
             }}
@@ -78,7 +78,7 @@ function updateAnimeList(anime_id, status, progress) {
                 id
                 status
                 progress
-                media { id title { romaji english } episodes format seasonYear status source coverImage { large medium } isFavourite isAdult }
+                media { id title { romaji english } episodes format seasonYear status source coverImage { large medium } description isFavourite isAdult }
             }
         }
     `;
@@ -101,7 +101,7 @@ function searchForAnime(search_query) {
         query ($page: Int, $perPage: Int, $search: String) {
             Page (page: $page, perPage: $perPage) { pageInfo { total currentPage lastPage hasNextPage perPage }
             media (type: ANIME, search: $search) {
-                id title { romaji english } format status seasonYear source coverImage { large medium } genres averageScore studios { nodes { id name isAnimationStudio } } isAdult
+                id title { romaji english } format status seasonYear source coverImage { large medium } description genres averageScore studios { nodes { id name isAnimationStudio } } isAdult
             }
         }}
     `;
@@ -114,6 +114,25 @@ function searchForAnime(search_query) {
     return new Promise((resolve, reject) => {
         sendRequest(query, variables, false).then(data => {
             resolve(data.Page.media);
+        });
+    });
+}
+
+function deleteListEntry(anime_id) {
+    const query = `
+        mutation ($id: Int) {
+            DeleteMediaListEntry (id: $id) {
+                deleted
+            }
+        }
+    `;
+    const variables = {
+        "id": anime_id
+    };
+
+    return new Promise((resolve, reject) => {
+        sendRequest(query, variables, true).then(data => {
+            resolve(data);
         });
     });
 }

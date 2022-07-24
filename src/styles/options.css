@@ -39,14 +39,17 @@ main {
     display: flex;
     gap: 25px;
 }
+
 #submenu {
     width: 700px;
     left: 350px;
 }
-#submenu > div {
+
+#submenu>div {
     width: 100%;
 }
-#submenu > div:not(:first-child) {
+
+#submenu>div:not(:first-child) {
     display: none;
 }
 
@@ -54,21 +57,25 @@ main {
     min-width: 200px;
     width: 350px;
 }
-#menu > ul {
+
+#menu>ul {
     margin-top: 50px;
     list-style: none;
     padding: 0;
 }
-#menu > ul > li {
+
+#menu>ul>li {
     font-size: 18px;
     border-radius: 10px;
     padding: 25px 25px;
     cursor: pointer;
 }
-#menu > ul > li:hover {
+
+#menu>ul>li:hover {
     background-color: #212129;
 }
-#menu > ul > li.selected {
+
+#menu>ul>li.selected {
     background-color: #212129;
     color: var(--primary-color);
 }
@@ -84,15 +91,18 @@ main {
     main {
         flex-wrap: wrap;
     }
+
     #menu {
         width: 100%;
     }
 }
+
 @media only screen and (max-width: 420px) {
     main {
         padding: 10vh 8px;
     }
 }
+
 @media only screen and (max-width: 385px) {
     .option-box {
         padding: 25px 0px;
@@ -140,7 +150,7 @@ input.anitrex-input {
     box-sizing: border-box;
 }
 
-.search > #set-token {
+.search>#set-token {
     margin-top: 25px;
     display: none;
 }
@@ -154,11 +164,12 @@ input.anitrex-input {
 #update-list-button {
     transition: .5s background-color;
 }
+
 #update-list-button:hover {
     background-color: var(--secondary-color);
 }
 
-#update-list-button > i {
+#update-list-button>i {
     margin: auto;
     font-size: 25px;
 }
@@ -190,7 +201,8 @@ hr {
 .input-group {
     margin-top: 25px;
 }
-.input-group > input {
+
+.input-group>input {
     margin-top: 15px;
 }
 
@@ -221,10 +233,12 @@ hr {
     color: white;
     border: none;
 }
+
 .filter-remove-button:hover {
     background-color: #17171D;
     color: var(--secondary-color);
 }
+
 input[type="color"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -238,21 +252,23 @@ input[type="color"] {
     outline: none;
     cursor: pointer;
 }
+
 ::-webkit-color-swatch-wrapper {
     padding: 0;
 }
-::-webkit-color-swatch{
+
+::-webkit-color-swatch {
     border: 0;
     border-radius: 10px;
 }
 
 ::-moz-color-swatch,
-::-moz-focus-inner{
+::-moz-focus-inner {
     border: 0;
     border-radius: 10px;
 }
 
-::-moz-focus-inner{
+::-moz-focus-inner {
     padding: 0;
 }
 
@@ -261,27 +277,28 @@ input[type="color"] {
     align-items: center;
     gap: 10px;
 }
+
 #color-code {
     cursor: pointer;
 }
 
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
+/* Firefox */
+* {
     scrollbar-width: auto;
     scrollbar-color: #17171D #212129;
 }
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
     width: 8px;
 }
 
-  *::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
     background: #212129;
 }
 
-  *::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
     background-color: #17171D;
     border-radius: 4px;
     border: 2px solid #212129;
@@ -352,6 +369,48 @@ input[type="color"] {
     transform: translateX(25px);
 }
 
+.toggle-list-box {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    margin-left: -40px;
+}
+.toggle-list-box > li {
+    margin-top: 15px;
+}
+.toggle-list-box > li > label {
+    display: inline-block;
+    text-align: center;
+    width: 100px;
+    font-size: 14px;
+    background-color: #17171D;
+    border: 2px solid grey;
+    color: grey;
+    border-radius: 25px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all .2s;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.toggle-list-box > li > input[type="checkbox"] {
+    display: none;
+}
+.toggle-list-box > li > input:checked + label {
+    border: 2px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+    transition: all .3s;
+}
+
+
 select {
     height: 45px;
     width: 120px;
@@ -365,9 +424,11 @@ select {
     appearance: none;
     cursor: pointer;
 }
+
 .select-wrapper {
     position: relative;
 }
+
 .select-wrapper::after {
     pointer-events: none;
     content: '▼';
@@ -380,7 +441,7 @@ select {
 .todo-badge {
     font-size: 13px;
     color: var(--primary-color);
-    
+
 }
 
 .setting-update-message {

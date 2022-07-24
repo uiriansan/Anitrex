@@ -17,7 +17,7 @@
                 <li data-for="anilist" class="selected"><i class='bx bx-barcode-reader'></i> AniList</li>
                 <li data-for="appearance"><i class='bx bxs-color-fill'></i> Appearance</li>
                 <li data-for="search"><i class='bx bx-search-alt' ></i> Search</li>
-                <li data-for="anime-list"><i class='bx bxs-bookmark' ></i> Anime list</li>
+                <li data-for="anime-list"><i class='bx bx-list-ul' ></i> Anime list</li>
                 <li data-for="about"><i class='bx bxs-info-circle' ></i> About</li>
             </ul>
         </div>
@@ -64,6 +64,7 @@
                             <input type="color" id="color-picker" name="color_picker" />
                         </div>
                     </div>
+                    <p>The default color is #FB6641 | 251,102,65, if you wonder.</p>
                 </div>
             </div>
     
@@ -82,7 +83,7 @@
                     <!-- TODO TODO TODO TODO TODO TODO -->
                     <div class="search-anime">
                         <div class="switch-box">
-                            <h3>External search <span class="todo-badge">TODO</span></h3>
+                            <h3>External search</h3>
                             <div class="switch__container">
                                 <input id="switch-external-search" class="switch switch--shadow" type="checkbox" checked>
                                 <label for="switch-external-search"></label>
@@ -112,6 +113,17 @@
                     </div>
                     <p>if you update your list directly from AniList website, press this button to sync the changes.</p>
                     <p class="setting-update-message" id="setting-update-update-anime-list"></p>
+                </div>
+                <div class="option-box">
+                    <h3>Enabled lists</h3>
+                    <p>Choose which lists will be displayed. These settings will be ignored if you search your anime list.</p>
+                    <ul class="toggle-list-box">
+                        <li><input type="checkbox" id="toggle-recent-list" name="recent" checked><label for="toggle-recent-list">Recent</label></li>
+                        <li><input type="checkbox" id="toggle-watching-list" name="watching" checked><label for="toggle-watching-list">Watching</label></li>
+                        <li><input type="checkbox" id="toggle-planning-list" name="planning" checked><label for="toggle-planning-list">Planning</label></li>
+                        <li><input type="checkbox" id="toggle-paused-list" name="paused" checked><label for="toggle-paused-list">Paused</label></li>
+                        <li><input type="checkbox" id="toggle-completed-list" name="completed" checked><label for="toggle-completed-list">Completed</label></li>
+                    </ul>
                 </div>
                 <div class="option-box">
                     <div class="switch-box">
