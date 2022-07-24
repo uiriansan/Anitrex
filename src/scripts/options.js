@@ -59,7 +59,9 @@ document.getElementById('switch-external-search').checked = settings.external_se
 document.getElementById('external-search-input').disabled = !settings.external_search;
 document.getElementById('adult-external-search-input').disabled = !settings.external_search;
 document.getElementById('external-search-input').value = settings.external_search_url.common;
+document.getElementById('external-search-input').style.backgroundImage = `url(https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${settings.external_search_url.common}&size=16)`;
 document.getElementById('adult-external-search-input').value = settings.external_search_url.adult;
+document.getElementById('adult-external-search-input').style.backgroundImage = `url(https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${settings.external_search_url.adult}&size=16)`;
 document.getElementById('toggle-recent-list').checked = settings.lists.recent;
 document.getElementById('toggle-watching-list').checked = settings.lists.watching;
 document.getElementById('toggle-planning-list').checked = settings.lists.planning;
@@ -88,6 +90,8 @@ document.getElementById('set-external-search-url').addEventListener('click', (e)
 
     settings.external_search_url.common = common_url;
     settings.external_search_url.adult = adult_url;
+    document.getElementById('external-search-input').style.backgroundImage = `url(https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${common_url}&size=16)`;
+    document.getElementById('adult-external-search-input').style.backgroundImage = `url(https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${adult_url}&size=16)`;
     localStorage.setItem('anitrex-settings', JSON.stringify(settings));
 
     const m = document.getElementById('setting-update-external-search');
