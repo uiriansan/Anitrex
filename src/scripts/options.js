@@ -46,7 +46,8 @@ if (!localStorage.getItem('anitrex-settings')) {
             planning: true,
             paused: true,
             completed: true
-        }
+        },
+        recent_list_size: 5
     };
     localStorage.setItem('anitrex-settings', JSON.stringify(settings));
 }
@@ -67,6 +68,8 @@ document.getElementById('toggle-watching-list').checked = settings.lists.watchin
 document.getElementById('toggle-planning-list').checked = settings.lists.planning;
 document.getElementById('toggle-paused-list').checked = settings.lists.paused;
 document.getElementById('toggle-completed-list').checked = settings.lists.completed;
+document.getElementById('recent-list-range-input').value = settings.recent_list_size;
+document.getElementById('recent-list-range-output').innerHTML = settings.recent_list_size;
 
 document.getElementById('switch-fast-search').addEventListener('change', (e) => {
     settings.fast_search = e.target.checked;
@@ -122,6 +125,12 @@ function handleExternalSearchURLChange(event) {
         setButton.style.display = 'none';
     }
 }
+
+document.getElementById('recent-list-range-input').addEventListener('input', (e) => {
+    settings.recent_list_size = e.target.value;
+    localStorage.setItem('anitrex-settings', JSON.stringify(settings));
+    document.getElementById('recent-list-range-output').innerHTML = e.target.value;
+});
 
 document.documentElement.style.setProperty('--primary-color', settings.colors.primary);
 document.documentElement.style.setProperty('--secondary-color', settings.colors.secondary);

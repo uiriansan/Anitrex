@@ -459,9 +459,6 @@ function addAnimeToRecent(anime) {
         localStorage.setItem('anitrex-recent-list', JSON.stringify([]));
     }
 
-    console.log(anime.status);
-    console.log(anime.progress);
-
     const anime_in_recent_list = recent_list.findIndex(x => x.media.id == anime.media.id);
     if (anime_in_recent_list === 0) {
         recent_list[0].progress = anime.progress;
@@ -473,7 +470,7 @@ function addAnimeToRecent(anime) {
     if (anime_in_recent_list !== -1) {
         recent_list.splice(anime_in_recent_list, 1);
     } else {
-        recent_list.splice(4, 1);
+        recent_list.splice(settings.recent_list_size-1, recent_list.length+1-settings.recent_list_size);
     }
 
     recent_list.unshift(anime);
@@ -607,6 +604,7 @@ function handleAnimeListExpansion() {
     }
 }
 
+// TODO
 // async function deleteAnimeFromList(e) {
 //     console.log('af');
 //     const anime_id = e.currentTarget.dataset.anime;
